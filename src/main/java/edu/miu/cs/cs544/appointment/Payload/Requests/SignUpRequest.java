@@ -3,10 +3,7 @@ package edu.miu.cs.cs544.appointment.Payload.Requests;
 import edu.miu.cs.cs544.appointment.Models.enums.RoleName;
 import lombok.Data;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 
 @Data
 public class SignUpRequest {
@@ -27,7 +24,7 @@ public class SignUpRequest {
     @Size(min = 2, max = 20)
     private String password;
 
-    @NotBlank
+    @NotNull
     //@Pattern(regexp = "company|jobseeker", flags = Pattern.Flag.CASE_INSENSITIVE)
     private RoleName role;
 }

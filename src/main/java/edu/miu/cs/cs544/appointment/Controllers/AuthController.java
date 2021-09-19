@@ -72,36 +72,41 @@ public class AuthController {
 
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignUpRequest signUpRequest) {
-        if(userService.existsByUsername(signUpRequest.getUsername())) {
-            return new ResponseEntity(new ApiResponse(false, "Username is already taken!"),
-                    HttpStatus.BAD_REQUEST);
+        try{
+            if(userService.existsByUsername(signUpRequest.getUsername())) {
+                return new ResponseEntity(new ApiResponse(false, "Username is already taken!"),
+                        HttpStatus.BAD_REQUEST);
+            }
+
+            if(userService.existsByEmail(signUpRequest.getEmail())) {
+                return new ResponseEntity(new ApiResponse(false, "Email Address already in use!"),
+                        HttpStatus.BAD_REQUEST);
+            }
+
+            // Creating user's account
+            User user = new User(signUpRequest.getName(), signUpRequest.getUsername(),
+                    signUpRequest.getEmail(), signUpRequest.getPassword());
+
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+
+            RoleName userRoleName = signUpRequest.getRole();
+            Role userRole = roleRepository.findByName(userRoleName)
+                    .orElseThrow(() -> new AppException("User Role not set."+signUpRequest.getRole()));
+
+            user.setRoles(Collections.singleton(userRole));
+
+            User result = userService.save(user);
+
+            //notificationServiceFactory.getService(NotificationType.Email).sendNotification(result,"Welcome to MIU Job Portal","Welcome "+result.getName()+" to MIU Job Portal");
+
+            URI location = ServletUriComponentsBuilder
+                    .fromCurrentContextPath().path("/users/{username}")
+                    .buildAndExpand(result.getUsername()).toUri();
+
+            return ResponseEntity.created(location).body(new ApiResponse(true, "User registered successfully"));
+
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body(new ApiResponse(false, e.getMessage()));
         }
-
-        if(userService.existsByEmail(signUpRequest.getEmail())) {
-            return new ResponseEntity(new ApiResponse(false, "Email Address already in use!"),
-                    HttpStatus.BAD_REQUEST);
-        }
-
-        // Creating user's account
-        User user = new User(signUpRequest.getName(), signUpRequest.getUsername(),
-                signUpRequest.getEmail(), signUpRequest.getPassword());
-
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-
-        RoleName userRoleName = signUpRequest.getRole();
-        Role userRole = roleRepository.findByName(userRoleName)
-                .orElseThrow(() -> new AppException("User Role not set."+signUpRequest.getRole()));
-
-        user.setRoles(Collections.singleton(userRole));
-
-        User result = userService.save(user);
-
-       //notificationServiceFactory.getService(NotificationType.Email).sendNotification(result,"Welcome to MIU Job Portal","Welcome "+result.getName()+" to MIU Job Portal");
-
-        URI location = ServletUriComponentsBuilder
-                .fromCurrentContextPath().path("/users/{username}")
-                .buildAndExpand(result.getUsername()).toUri();
-
-        return ResponseEntity.created(location).body(new ApiResponse(true, "User registered successfully"));
     }
 }
