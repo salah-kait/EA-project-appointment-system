@@ -12,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -77,6 +78,11 @@ public class ReservationService {
             return reservation.get();
         else
             return null;
+    }
+
+    public List<Reservation> getReservationByAppointmentAndStatus(Long appointment_id, String status){
+        List<Reservation> reservations = reservationRepository.findByAppointmentIdAndStatus(appointment_id, status);
+        return reservations;
     }
 
 }
