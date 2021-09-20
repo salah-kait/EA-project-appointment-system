@@ -1,16 +1,14 @@
-package edu.miu.cs.cs544.appointment.service;
+package edu.miu.cs.cs544.appointment.Services;
 
-import edu.miu.cs.cs544.appointment.Models.User;
+import edu.miu.cs.cs544.appointment.Models.Reservation;
 import edu.miu.cs.cs544.appointment.Models.appointment.Appointment;
-import edu.miu.cs.cs544.appointment.Models.reservation.Reservation;
+
 import edu.miu.cs.cs544.appointment.Payload.Requests.CreateAppointment;
 import edu.miu.cs.cs544.appointment.Payload.Response.ApiResponse;
 import edu.miu.cs.cs544.appointment.Repositories.AppointmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
-import java.time.LocalDate;
 import java.util.List;
 @Service
 public class AppointmentServiceImp implements AppointmentService{
