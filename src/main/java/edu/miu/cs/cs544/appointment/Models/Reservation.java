@@ -12,7 +12,7 @@ import java.util.Date;
 
 @Data
 @Entity
-@Table(name = "roles")
+@Table(name = "reservations")
 public class Reservation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,15 +23,13 @@ public class Reservation {
     @Column
     private ReservationStatus status;
 
-    @Temporal(TemporalType.TIMESTAMP)
     @Column
-    private Date reservationTime;
+    private LocalDateTime reservationTime;
 
     @ManyToOne(cascade = CascadeType.ALL)
     private User user;
 
-
     @ManyToOne(cascade = CascadeType.ALL)
-    @Column
     private Appointment appointment;
+
 }
