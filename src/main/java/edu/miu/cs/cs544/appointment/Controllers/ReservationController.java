@@ -25,14 +25,15 @@ public class ReservationController{
     @PostMapping("/reserve")
     public ResponseEntity<?> createReservation(@RequestParam(name = "appointment_id", required = true) Long id,
                                                @RequestBody Reservation reservation) throws NotFoundException {
-        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("api/reservation/reserve").toUriString());
+        URI uri = URI.create(ServletUriComponentsBuilder
+                .fromCurrentContextPath()
+                .path("api/reservation/reserve")
+                .toUriString());
         return ResponseEntity.created(uri).body(reservationService.createReservation(reservation, id));
     }
 
-
-
     // Get list of reservation(Paginated)
-    @GetMapping(path = "reservations", params = "paged = true")
+    @GetMapping(path = "reservations", params = "paged=true")
     public Page<Reservation> getReservations(Pageable pageable){
         return reservationService.getAllReservations(pageable);
     }
