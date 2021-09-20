@@ -1,7 +1,7 @@
 package edu.miu.cs.cs544.appointment.Models.appointment;
 
+import edu.miu.cs.cs544.appointment.Models.Reservation;
 import edu.miu.cs.cs544.appointment.Models.User;
-import edu.miu.cs.cs544.appointment.Models.reservation.Reservation;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -31,7 +31,7 @@ public class Appointment {
     @ManyToOne
     private User provider;
     @OneToMany
-private List<Reservation> resevationList;
+private List<Reservation> reservationList;
 
     public Appointment(Category category,LocalDate startTime, LocalDate endTime, Long duration, String location, User provider) {
         this.startTime = startTime;
@@ -48,8 +48,6 @@ private List<Reservation> resevationList;
         this.duration = duration;
         this.location = location;
         this.category= category;
-
-
 
     }
 }
