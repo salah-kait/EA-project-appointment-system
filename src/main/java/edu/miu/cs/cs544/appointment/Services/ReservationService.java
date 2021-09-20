@@ -33,6 +33,7 @@ public class ReservationService {
         else {
             Appointment appointment1 = appointment.get();
             reservation.setAppointment(appointment1);
+            reservation.setStatus(ReservationStatus.PENDING);
             return reservationRepository.save(reservation);
         }
 
@@ -42,7 +43,7 @@ public class ReservationService {
         return reservationRepository.findAll();
     }
 
-    public String updateReservation(Long id, Reservation reservation){
+    public Reservation updateReservation(Long id, Reservation reservation){
         Reservation reservation1 = null;
         if(reservationExist(id) != null){
             reservation1 = reservationExist(id);
@@ -53,9 +54,9 @@ public class ReservationService {
 
             reservationRepository.save(reservation1);
 
-            return "Reservation with ID: "+reservation1.getId() + " updated Successfully";
-        }
-        return "There is no reservation with ID "+ reservation1.getId() + "to update";
+            return reservation1;
+        } else
+        return reservation1;
     }
 
     public Reservation cancelReservation(Reservation reservation, Long id){
