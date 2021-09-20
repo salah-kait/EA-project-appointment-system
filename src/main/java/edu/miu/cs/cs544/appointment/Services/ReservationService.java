@@ -48,7 +48,7 @@ public class ReservationService {
             reservation1 = reservationExist(id);
 
             reservation1.setAppointment(reservation.getAppointment());
-            reservation1.setReservationTime(reservation.getReservationTime());
+            reservation1.setReservationDateTime(reservation.getReservationDateTime());
             reservation1.setStatus(ReservationStatus.PENDING);
 
             reservationRepository.save(reservation1);

@@ -7,6 +7,8 @@ import lombok.Data;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.Date;
 
@@ -19,12 +21,15 @@ public class Reservation {
     @Setter(AccessLevel.NONE)
     private Long id;
 
+    @NotBlank
     @Enumerated(EnumType.STRING)
     @Column
     private ReservationStatus status;
 
+    @NotBlank
     @Column
-    private LocalDateTime reservationTime;
+    private LocalDateTime reservationDateTime;
+
 
     @ManyToOne(cascade = CascadeType.ALL)
     private User user;
