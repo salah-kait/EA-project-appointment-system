@@ -1,7 +1,8 @@
-package edu.miu.cs.cs544.appointment.service;
+package edu.miu.cs.cs544.appointment.Services;
 
-import edu.miu.cs.cs544.appointment.Models.Reservation;
+import edu.miu.cs.cs544.appointment.Models.reservation.Reservation;
 import edu.miu.cs.cs544.appointment.Models.appointment.Appointment;
+
 import edu.miu.cs.cs544.appointment.Payload.Requests.CreateAppointment;
 import edu.miu.cs.cs544.appointment.Payload.Response.ApiResponse;
 import edu.miu.cs.cs544.appointment.Repositories.AppointmentRepository;
@@ -73,7 +74,7 @@ public class AppointmentServiceImp implements AppointmentService{
     @Override
     public List<Reservation> allResevations(Long appointmentId) {
         Appointment appointment =appointmentRepository.getById(appointmentId);
-        return appointment.getReservationList();
+        return appointment.getResevationList();
     }
 
     @Override

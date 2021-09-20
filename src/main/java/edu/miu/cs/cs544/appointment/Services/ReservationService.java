@@ -1,8 +1,8 @@
 package edu.miu.cs.cs544.appointment.Services;
 
-import edu.miu.cs.cs544.appointment.Models.Reservation;
+import edu.miu.cs.cs544.appointment.Models.reservation.Reservation;
 import edu.miu.cs.cs544.appointment.Models.appointment.Appointment;
-import edu.miu.cs.cs544.appointment.Models.enums.ReservationStatus;
+import edu.miu.cs.cs544.appointment.Models.reservation.ReservationStatus;
 import edu.miu.cs.cs544.appointment.Payload.Requests.CreateReservation;
 import edu.miu.cs.cs544.appointment.Payload.Response.ApiResponse;
 import edu.miu.cs.cs544.appointment.Repositories.AppointmentRepository;
