@@ -1,8 +1,10 @@
 package edu.miu.cs.cs544.appointment.Services;
 
-import edu.miu.cs.cs544.appointment.Models.Appointment;
 import edu.miu.cs.cs544.appointment.Models.Reservation;
+import edu.miu.cs.cs544.appointment.Models.appointment.Appointment;
 import edu.miu.cs.cs544.appointment.Models.enums.ReservationStatus;
+import edu.miu.cs.cs544.appointment.Payload.Requests.CreateReservation;
+import edu.miu.cs.cs544.appointment.Payload.Response.ApiResponse;
 import edu.miu.cs.cs544.appointment.Repositories.AppointmentRepository;
 import edu.miu.cs.cs544.appointment.Repositories.ReservationRepository;
 import javassist.NotFoundException;
@@ -22,58 +24,63 @@ public class ReservationService {
     private final AppointmentRepository appointmentRepository;
 
     @Autowired
-    ReservationService(ReservationRepository reservationRepository,AppointmentRepository appointmentRepository){
+    ReservationService(ReservationRepository reservationRepository, AppointmentRepository appointmentRepository) {
         this.reservationRepository = reservationRepository;
         this.appointmentRepository = appointmentRepository;
     }
 
-    public Reservation createReservation(Reservation reservation,Long id) throws NotFoundException {
+    public Reservation createReservation(CreateReservation createReservation, Long id) throws NotFoundException {
+
 
         Appointment appointment = appointmentRepository.findById(id).orElseThrow(() ->
                 new NotFoundException("appointment not found")
         );
 
-        reservation.setAppointment(appointment);
-        reservation.setStatus(ReservationStatus.PENDING);
-        return reservationRepository.save(reservation);
+        createReservation.setAppointment(appointment);
 
+        Reservation reservation = new Reservation(
+                createReservation.getReservationStatus(),
+                createReservation.getReservationDateTime()
+        );
+
+        return reservationRepository.save(reservation);
 
     }
 
-    public Page<Reservation> getAllReservations(Pageable pageable){
+    public Page<Reservation> getAllReservations(Pageable pageable) {
         return reservationRepository.findAll(pageable);
     }
 
-    public Reservation updateReservation(Long id, Reservation reservation){
+    public Reservation updateReservation(Long id, CreateReservation createReservation) {
         Reservation reservation1 = null;
-        if(getReservation(id) != null){
+        if (getReservation(id) != null) {
             reservation1 = getReservation(id);
 
-            reservation1.setAppointment(reservation.getAppointment());
-            reservation1.setReservationDateTime(reservation.getReservationDateTime());
+            reservation1.setAppointment(createReservation.getAppointment());
+            reservation1.setReservationDateTime(createReservation.getReservationDateTime());
 //            reservation1.setStatus(ReservationStatus.PENDING);
 
-            reservationRepository.save(reservation);
+            reservationRepository.save(reservation1);
 
             return reservation1;
 
         } else
-        return reservation1;
+            return reservation1;
     }
 
-    public Reservation cancelReservation(Reservation reservation, Long id){
-        if(getReservation(id) != null){
+    public Reservation cancelReservation(Reservation reservation, Long id) {
+
+        if (getReservation(id) != null) {
             reservation.setStatus(ReservationStatus.CANCELED);
-            reservationRepository.save(reservation);
-            return reservation;
+            return reservationRepository.save(reservation);
         }
         return null;
     }
 
-    public Reservation getReservation(Long id){
+    public Reservation getReservation(Long id) {
         Optional<Reservation> reservation = reservationRepository.findById(id);
 
-        if(reservation.isPresent())
+        if (reservation.isPresent())
             return reservation.get();
         else
             return null;

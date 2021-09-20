@@ -1,6 +1,7 @@
 package edu.miu.cs.cs544.appointment.Controllers;
 
 import edu.miu.cs.cs544.appointment.Models.Reservation;
+import edu.miu.cs.cs544.appointment.Payload.Requests.CreateReservation;
 import edu.miu.cs.cs544.appointment.Services.ReservationService;
 import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import javax.servlet.Servlet;
 import java.net.URI;
 
 
@@ -24,7 +24,7 @@ public class ReservationController{
     // Create user activation
     @PostMapping("/reserve")
     public ResponseEntity<?> createReservation(@RequestParam(name = "appointment_id", required = true) Long id,
-                                               @RequestBody Reservation reservation) throws NotFoundException {
+                                               @RequestBody CreateReservation reservation) throws NotFoundException {
         URI uri = URI.create(ServletUriComponentsBuilder
                 .fromCurrentContextPath()
                 .path("api/reservation/reserve")
@@ -41,8 +41,8 @@ public class ReservationController{
 
     // Update reservation
     @PutMapping("{id}")
-    public ResponseEntity<Reservation> updateReservation(Long id, Reservation reservation){
-        Reservation result = reservationService.updateReservation(id, reservation);
+    public ResponseEntity<Reservation> updateReservation(Long id, CreateReservation createReservation){
+        Reservation result = reservationService.updateReservation(id, createReservation);
 
         if(result != null){
             return ResponseEntity.ok(result);
