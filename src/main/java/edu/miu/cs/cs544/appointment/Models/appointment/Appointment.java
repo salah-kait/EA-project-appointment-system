@@ -1,7 +1,6 @@
 package edu.miu.cs.cs544.appointment.Models.appointment;
 
 import edu.miu.cs.cs544.appointment.Models.User;
-
 import edu.miu.cs.cs544.appointment.Models.reservation.Reservation;
 import lombok.AllArgsConstructor;
 import lombok.Data;

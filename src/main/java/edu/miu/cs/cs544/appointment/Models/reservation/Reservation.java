@@ -9,7 +9,9 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Data
 @Entity
@@ -35,5 +37,12 @@ public class Reservation {
 
     @ManyToOne(cascade = CascadeType.ALL)
     private Appointment appointment;
+
+    public Reservation(){}
+
+    public Reservation(ReservationStatus status,LocalDateTime reservationDateTime){
+        this.status = status;
+        this.reservationDateTime = reservationDateTime;
+    }
 
 }
