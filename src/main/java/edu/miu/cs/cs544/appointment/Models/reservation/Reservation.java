@@ -1,16 +1,15 @@
-package edu.miu.cs.cs544.appointment.Models;
+package edu.miu.cs.cs544.appointment.Models.reservation;
 
 
-import edu.miu.cs.cs544.appointment.Models.enums.ReservationStatus;
+import edu.miu.cs.cs544.appointment.Models.User;
+import edu.miu.cs.cs544.appointment.Models.appointment.Appointment;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Data
 @Entity

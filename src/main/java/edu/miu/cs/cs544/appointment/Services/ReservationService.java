@@ -1,8 +1,8 @@
 package edu.miu.cs.cs544.appointment.Services;
 
-import edu.miu.cs.cs544.appointment.Models.Appointment;
-import edu.miu.cs.cs544.appointment.Models.Reservation;
-import edu.miu.cs.cs544.appointment.Models.enums.ReservationStatus;
+import edu.miu.cs.cs544.appointment.Models.appointment.Appointment;
+import edu.miu.cs.cs544.appointment.Models.reservation.Reservation;
+import edu.miu.cs.cs544.appointment.Models.reservation.ReservationStatus;
 import edu.miu.cs.cs544.appointment.Repositories.AppointmentRepository;
 import edu.miu.cs.cs544.appointment.Repositories.ReservationRepository;
 import javassist.NotFoundException;

@@ -1,4 +1,4 @@
-package edu.miu.cs.cs544.appointment.Models.enums;
+package edu.miu.cs.cs544.appointment.Models.reservation;
 
 public enum ReservationStatus {
     ACCEPTED,
