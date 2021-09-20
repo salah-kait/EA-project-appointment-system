@@ -41,8 +41,16 @@ public class ReservationService {
 
     }
 
-    public Page<Reservation> getAllReservations(Pageable pageable){
-        return reservationRepository.findAll(pageable);
+    /**
+     * Get list of reservation for a client
+     *
+     * @param pageable
+     * @param userId
+     * @return
+     */
+    public Page<Reservation> getAllReservations(Pageable pageable, Long userId){
+        Page<Reservation> reservations = reservationRepository.findByUserId(pageable, userId);
+        return reservations;
     }
 
     public Reservation updateReservation(Long id, Reservation reservation){
