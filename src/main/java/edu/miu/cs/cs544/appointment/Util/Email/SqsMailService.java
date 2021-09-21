@@ -13,6 +13,6 @@ public class SqsMailService implements EmailService{
 
     @Override
     public void sendMessage(MailMessage mailMessage) {
-        sqsMessageProducer.send(new EmailQueueDTO(mailMessage.getSubject(),mailMessage.getBody(),mailMessage.getTo()));
+        sqsMessageProducer.send(new EmailQueueDTO(mailMessage));
     }
 }
