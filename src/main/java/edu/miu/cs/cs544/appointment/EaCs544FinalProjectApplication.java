@@ -15,14 +15,4 @@ public class EaCs544FinalProjectApplication {
         SpringApplication.run(EaCs544FinalProjectApplication.class, args);
     }
 
-    @Bean
-    CommandLineRunner run(AppointmentRepository appointmentRepository){
-        return args -> {
-            appointmentRepository.save(new Appointment(null,"Fairfield",new ArrayList<>()));
-            appointmentRepository.save(new Appointment(null,"Iowa",new ArrayList<>()));
-            appointmentRepository.save(new Appointment(null,"Des Moins",new ArrayList<>()));
-            appointmentRepository.save(new Appointment(null,"Chicago",new ArrayList<>()));
-        };
-    }
-
 }
