@@ -8,6 +8,7 @@ import lombok.Data;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.validation.constraints.NotBlank;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
@@ -17,11 +18,11 @@ public class CreateReservation {
     @Enumerated(EnumType.STRING)
     private ReservationStatus reservationStatus;
 
+    private LocalDate reservationDateTime;
+
+    private Long userId;
+
     @NotBlank
-    private LocalDateTime reservationDateTime;
-
-    private User user;
-
-    private Appointment appointment;
+    private Long appointmentId;
 
 }

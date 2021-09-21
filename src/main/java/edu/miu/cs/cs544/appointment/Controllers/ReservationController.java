@@ -25,20 +25,21 @@ public class ReservationController{
     private ReservationService reservationService;
 
     // Create user activation
-    @PostMapping
     @PreAuthorize("hasRole('CLIENT')")
-    public ResponseEntity<?> createReservation(@RequestParam(name = "appointment_id", required = true) Long id,
-                                               @RequestBody CreateReservation reservation) throws NotFoundException {
-        URI uri = URI.create(ServletUriComponentsBuilder
-                .fromCurrentContextPath()
-                .path("api/reservation/reserve")
-                .toUriString());
-        return ResponseEntity.created(uri).body(reservationService.createReservation(reservation, id));
+    @PostMapping
+    public ResponseEntity<?> createReservation(@RequestBody CreateReservation reservation, @CurrentUser UserPrincipal userPrincipal) {
+        try {
+            return ResponseEntity.ok(reservationService.createReservation(reservation, userPrincipal.getId()));
+        }catch (NotFoundException e){
+            return ResponseEntity.badRequest().build();
+        }
+
+
     }
 
     // Get list of reservation(Paginated)
-    @GetMapping(path = "{userId}", params = "paged=true")
-    @PreAuthorize("hasRole('CLIENT')")
+    @GetMapping(params = "paged=true")
+    @PreAuthorize("hasRole('PROVIDER') OR hasRole('CLIENT')")
     public Page<Reservation> getReservations(Pageable pageable, @CurrentUser UserPrincipal userPrincipal){
         return reservationService.getAllReservations(pageable, userPrincipal.getId());
 
@@ -48,14 +49,42 @@ public class ReservationController{
     // Update reservation
     @PutMapping("{id}")
     @PreAuthorize("hasRole('ADMIN') OR hasRole('PROVIDER') OR hasRole('CLIENT')")
-    public ResponseEntity<Reservation> updateReservation(Long id, CreateReservation createReservation){
-        Reservation result = reservationService.updateReservation(id, createReservation);
+    public ResponseEntity<Reservation> updateReservation(@PathVariable Long id, CreateReservation createReservation){
+        try {
+            Reservation result = reservationService.updateReservation(id, createReservation);
 
-        if(result != null){
-            return ResponseEntity.ok(result);
-        }else{
+            if(result != null){
+                return ResponseEntity.ok(result);
+            }else{
+                return ResponseEntity.badRequest().build();
+            }
+        }catch (NotFoundException e){
+            return ResponseEntity.badRequest().build();
+        }
+
+
+    }
+
+    @PreAuthorize("hasRole('PROVIDER')")
+    @PatchMapping(path = "/admit/{id}")
+    public ResponseEntity<Reservation> acceptReservation(@PathVariable Long id){
+        try {
+            return ResponseEntity.ok(reservationService.acceptReservation(id));
+        }catch (NotFoundException e){
             return ResponseEntity.badRequest().build();
         }
     }
 
+    @PreAuthorize("hasRole('PROVIDER') OR hasRole('CLIENT')")
+    @PatchMapping(path = "/cancel/{id}")
+    public ResponseEntity<Reservation> cancelReservation(@PathVariable Long id){
+
+        try {
+            return ResponseEntity.ok(reservationService.cancelReservation(id));
+        }catch (NotFoundException e){
+            return ResponseEntity.badRequest().build();
+        }
+
+
+    }
 }
