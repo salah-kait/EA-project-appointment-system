@@ -1,10 +1,9 @@
 package edu.miu.cs.cs544.appointment.Controllers;
 
-import edu.miu.cs.cs544.appointment.Payload.MessageQueueDTO.EmailQueueDTO;
 import edu.miu.cs.cs544.appointment.Payload.Requests.SignUpRequest;
 import edu.miu.cs.cs544.appointment.Security.CurrentUser;
 import edu.miu.cs.cs544.appointment.Security.UserPrincipal;
-import edu.miu.cs.cs544.appointment.Util.SqsMessageProducer;
+import edu.miu.cs.cs544.appointment.Util.Email.EmailSender;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,7 +17,7 @@ import javax.validation.Valid;
 public class TestController {
 
    @Autowired
-   SqsMessageProducer sqsMessageProducer;
+   EmailSender emailSender;
 
 
    @PostMapping("/test")
@@ -30,11 +29,7 @@ public class TestController {
    @GetMapping("/sqs")
    @PreAuthorize("hasRole('PROVIDER')")
    public void addCompany( @CurrentUser UserPrincipal userPrincipal) {
-      EmailQueueDTO emailDTO= new EmailQueueDTO();
-      emailDTO.setSubject("this is subject");
-      emailDTO.setBody("this is bodey");
-      emailDTO.setTo("salah.khudairat@gmail.com");
-      sqsMessageProducer.send(emailDTO);
+      emailSender.sendSimpleMessage("salah.khudairat@gmail.com","this is subject","this is bodey");
    }
 
 
