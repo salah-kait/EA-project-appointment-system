@@ -4,6 +4,7 @@ package edu.miu.cs.cs544.appointment.Models.reservation;
 import edu.miu.cs.cs544.appointment.Models.User;
 import edu.miu.cs.cs544.appointment.Models.appointment.Appointment;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Setter;
 
@@ -17,6 +18,7 @@ import java.util.Date;
 @Data
 @Entity
 @Table(name = "reservations")
+@AllArgsConstructor
 public class Reservation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
