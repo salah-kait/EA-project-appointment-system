@@ -65,6 +65,8 @@ public class AppointmentServiceImp implements AppointmentService{
                    new NotFoundException("category not found")
            );
 
+           appointment.setCategory(category);
+
            return   appointmentRepository.save(appointment);
     }
 
