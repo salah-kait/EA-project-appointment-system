@@ -72,6 +72,8 @@ public class ReservationController{
             return ResponseEntity.ok(reservationService.acceptReservation(id));
         }catch (NotFoundException e){
             return ResponseEntity.badRequest().build();
+        }catch (IllegalStateException illegalStateException){
+            return ResponseEntity.badRequest().build();
         }
     }
 

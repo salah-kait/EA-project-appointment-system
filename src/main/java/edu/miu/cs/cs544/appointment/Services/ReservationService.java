@@ -47,7 +47,6 @@ public class ReservationService {
                 new NotFoundException("appointment not found")
         );
 
-//        createReservation.setAppointmentId(createReservation.getAppointmentId());
 
         Reservation reservation = new Reservation(
                 createReservation.getReservationStatus(),
@@ -117,10 +116,20 @@ public class ReservationService {
         return reservations;
     }
 
-    public Reservation acceptReservation(Long id) throws NotFoundException {
+    public Reservation acceptReservation(Long id) throws NotFoundException, IllegalStateException{
         Reservation reservation = reservationRepository.findById(id).orElseThrow(() ->
                 new NotFoundException("reservation not found")
         );
+
+        Long appointmentId = reservation.getAppointment().getId();
+
+        // get accepted reservation for an appointment
+        List<Reservation> reservationList = getReservationByAppointmentAndStatus(appointmentId, "ACCEPTED");
+
+        // check if the appointment has already accept a reservation
+        if(reservationList.size() > 0){
+            throw new IllegalStateException("Appointment already reserved!");
+        }
         reservation.setStatus(ReservationStatus.ACCEPTED);
         return reservationRepository.save(reservation);
     }
