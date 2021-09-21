@@ -1,53 +1,92 @@
 package edu.miu.cs.cs544.appointment.Controllers;
 
-import edu.miu.cs.cs544.appointment.Models.Reservation;
+import edu.miu.cs.cs544.appointment.Models.reservation.Reservation;
+import edu.miu.cs.cs544.appointment.Security.CurrentUser;
+import edu.miu.cs.cs544.appointment.Security.UserPrincipal;
+import edu.miu.cs.cs544.appointment.Payload.Requests.CreateReservation;
 import edu.miu.cs.cs544.appointment.Services.ReservationService;
 import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import javax.servlet.Servlet;
 import java.net.URI;
 
 
 @RestController
-@RequestMapping("api/reservation")
+@RequestMapping("api/reservations")
 public class ReservationController{
 
     @Autowired
     private ReservationService reservationService;
 
     // Create user activation
-    @PostMapping("/reserve")
-    public ResponseEntity<?> createReservation(@RequestParam(name = "appointment_id", required = true) Long id,
-                                               @RequestBody Reservation reservation) throws NotFoundException {
-        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("api/reservation/reserve").toUriString());
-        return ResponseEntity.created(uri).body(reservationService.createReservation(reservation, id));
+    @PreAuthorize("hasRole('CLIENT')")
+    @PostMapping
+    public ResponseEntity<?> createReservation(@RequestBody CreateReservation reservation, @CurrentUser UserPrincipal userPrincipal) {
+        try {
+            return ResponseEntity.ok(reservationService.createReservation(reservation, userPrincipal.getId()));
+        }catch (NotFoundException e){
+            return ResponseEntity.badRequest().build();
+        }
+
+
     }
 
-
     // Get list of reservation(Paginated)
-    @GetMapping(path = "reservations", params = "paged = true")
-    public Page<Reservation> getReservations(Pageable pageable){
-        return reservationService.getAllReservations(pageable);
+    @GetMapping(params = "paged=true")
+    @PreAuthorize("hasRole('PROVIDER') OR hasRole('CLIENT')")
+    public Page<Reservation> getReservations(Pageable pageable, @CurrentUser UserPrincipal userPrincipal){
+        return reservationService.getAllReservations(pageable, userPrincipal.getId());
+
     }
 
 
     // Update reservation
     @PutMapping("{id}")
-    public ResponseEntity<Reservation> updateReservation(Long id, Reservation reservation){
-        Reservation result = reservationService.updateReservation(id, reservation);
+    @PreAuthorize("hasRole('ADMIN') OR hasRole('PROVIDER') OR hasRole('CLIENT')")
+    public ResponseEntity<Reservation> updateReservation(@PathVariable Long id, CreateReservation createReservation){
+        try {
+            Reservation result = reservationService.updateReservation(id, createReservation);
 
-        if(result != null){
-            return ResponseEntity.ok(result);
-        }else{
+            if(result != null){
+                return ResponseEntity.ok(result);
+            }else{
+                return ResponseEntity.badRequest().build();
+            }
+        }catch (NotFoundException e){
+            return ResponseEntity.badRequest().build();
+        }
+
+
+    }
+
+    @PreAuthorize("hasRole('PROVIDER')")
+    @PatchMapping(path = "/admit/{id}")
+    public ResponseEntity<Reservation> acceptReservation(@PathVariable Long id){
+        try {
+            return ResponseEntity.ok(reservationService.acceptReservation(id));
+        }catch (NotFoundException e){
+            return ResponseEntity.badRequest().build();
+        }catch (IllegalStateException illegalStateException){
             return ResponseEntity.badRequest().build();
         }
     }
 
+    @PreAuthorize("hasRole('PROVIDER') OR hasRole('CLIENT')")
+    @PatchMapping(path = "/cancel/{id}")
+    public ResponseEntity<Reservation> cancelReservation(@PathVariable Long id){
 
+        try {
+            return ResponseEntity.ok(reservationService.cancelReservation(id));
+        }catch (NotFoundException e){
+            return ResponseEntity.badRequest().build();
+        }
+
+
+    }
 }
