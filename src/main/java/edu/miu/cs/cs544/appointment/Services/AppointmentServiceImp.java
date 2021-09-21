@@ -16,8 +16,7 @@ public class AppointmentServiceImp implements AppointmentService{
   private AppointmentRepository appointmentRepository;
 
     @Override
-    public ApiResponse createAppointment( CreateAppointment createAppointment) {
-      //try {
+    public Appointment createAppointment( CreateAppointment createAppointment) {
           Appointment appointment = new Appointment(
               createAppointment.getStartTime(),
               createAppointment.getEndTime(),
@@ -28,15 +27,7 @@ public class AppointmentServiceImp implements AppointmentService{
               //createAppointment.getProvider()
           );
 
-          Appointment appointment2 =appointmentRepository.save(appointment);
-
-          System.out.println(appointment2);
-          return   new ApiResponse(true,"we will fix it") ;
-
-     // }catch (Exception e){
-     //     return   new ApiResponse(false,"error will fix it") ;
-
-    //  }
+          return   appointmentRepository.save(appointment);
 
 
     }

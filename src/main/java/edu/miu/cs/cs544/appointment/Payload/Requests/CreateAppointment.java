@@ -12,12 +12,11 @@ public class CreateAppointment {
     private LocalDate startTime;
     @NotBlank
     private LocalDate endTime;
-//@NotBlank
+
     private Long duration;
 
-@NotBlank
+    @NotBlank
     private String location;
 
-    private User provider;
-    private Category category;
+    private Long categoryId;
 }

@@ -7,7 +7,9 @@ import edu.miu.cs.cs544.appointment.Payload.Response.ApiResponse;
 import edu.miu.cs.cs544.appointment.Services.AppointmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -16,7 +18,8 @@ public class AppointmentController {
     private AppointmentService appointmentServiceImp;
     @PostMapping("/api/appointment")
     public ApiResponse createAppointment(@RequestBody CreateAppointment createAppointment){
-       return appointmentServiceImp.createAppointment(createAppointment);
+
+        return appointmentServiceImp.createAppointment(createAppointment);
     }
     @PutMapping("/api/appointment/{id}")
     public ApiResponse updateAppointment(@RequestBody CreateAppointment createAppointment ,@PathVariable Long id){

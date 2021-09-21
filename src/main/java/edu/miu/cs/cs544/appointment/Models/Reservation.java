@@ -1,6 +1,7 @@
 package edu.miu.cs.cs544.appointment.Models;
 
 
+import edu.miu.cs.cs544.appointment.Models.appointment.Appointment;
 import edu.miu.cs.cs544.appointment.Models.enums.ReservationStatus;
 import lombok.AccessLevel;
 import lombok.Data;

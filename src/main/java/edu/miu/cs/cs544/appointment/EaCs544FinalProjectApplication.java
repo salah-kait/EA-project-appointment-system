@@ -1,6 +1,5 @@
 package edu.miu.cs.cs544.appointment;
 
-import edu.miu.cs.cs544.appointment.Models.Appointment;
 import edu.miu.cs.cs544.appointment.Repositories.AppointmentRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
