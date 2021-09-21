@@ -1,7 +1,6 @@
 package edu.miu.cs.cs544.appointment.Security;
 
 import edu.miu.cs.cs544.appointment.Models.User;
-import edu.miu.cs.cs544.appointment.Models.enums.RoleName;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
@@ -56,14 +55,6 @@ public class UserPrincipal implements UserDetails {
 
     public Long getId() {
         return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getEmail() {
-        return email;
     }
 
     @Override
