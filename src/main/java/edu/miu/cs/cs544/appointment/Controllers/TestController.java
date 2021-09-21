@@ -1,6 +1,6 @@
 package edu.miu.cs.cs544.appointment.Controllers;
 
-import edu.miu.cs.cs544.appointment.Payload.MessageQueueDTO.EmailDTO;
+import edu.miu.cs.cs544.appointment.Payload.MessageQueueDTO.EmailQueueDTO;
 import edu.miu.cs.cs544.appointment.Payload.Requests.SignUpRequest;
 import edu.miu.cs.cs544.appointment.Security.CurrentUser;
 import edu.miu.cs.cs544.appointment.Security.UserPrincipal;
@@ -30,7 +30,7 @@ public class TestController {
    @GetMapping("/sqs")
    @PreAuthorize("hasRole('PROVIDER')")
    public void addCompany( @CurrentUser UserPrincipal userPrincipal) {
-      EmailDTO emailDTO= new EmailDTO();
+      EmailQueueDTO emailDTO= new EmailQueueDTO();
       emailDTO.setSubject("this is subject");
       emailDTO.setBody("this is bodey");
       emailDTO.setTo("salah.khudairat@gmail.com");
