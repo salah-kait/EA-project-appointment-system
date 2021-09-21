@@ -1,11 +1,16 @@
 package edu.miu.cs.cs544.appointment.Services;
 
+import edu.miu.cs.cs544.appointment.Models.User;
+import edu.miu.cs.cs544.appointment.Models.appointment.Category;
 import edu.miu.cs.cs544.appointment.Models.reservation.Reservation;
 import edu.miu.cs.cs544.appointment.Models.appointment.Appointment;
 
 import edu.miu.cs.cs544.appointment.Payload.Requests.CreateAppointment;
 import edu.miu.cs.cs544.appointment.Payload.Response.ApiResponse;
 import edu.miu.cs.cs544.appointment.Repositories.AppointmentRepository;
+import edu.miu.cs.cs544.appointment.Repositories.CategoryRepository;
+import edu.miu.cs.cs544.appointment.Repositories.UserRepository;
+import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,61 +19,55 @@ import java.util.List;
 public class AppointmentServiceImp implements AppointmentService{
     @Autowired
   private AppointmentRepository appointmentRepository;
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private CategoryRepository categoryRepository;
 
     @Override
-    public ApiResponse createAppointment( CreateAppointment createAppointment) {
-      //try {
+    public Appointment createAppointment(CreateAppointment createAppointment, Long id) throws NotFoundException {
           Appointment appointment = new Appointment(
               createAppointment.getStartTime(),
               createAppointment.getEndTime(),
               createAppointment.getDuration(),
-              createAppointment.getLocation(),
-              createAppointment.getCategory()
-               //   ,
-              //createAppointment.getProvider()
+              createAppointment.getLocation()
           );
 
-          Appointment appointment2 =appointmentRepository.save(appointment);
+        User user = userRepository.findById(id).orElseThrow(() ->
+                new NotFoundException("User not found")
+        );
 
-          System.out.println(appointment2);
-          return   new ApiResponse(true,"we will fix it") ;
+        Category category = categoryRepository.findById(id).orElseThrow(()->
+                new NotFoundException("catagory not found")
+        );
 
-     // }catch (Exception e){
-     //     return   new ApiResponse(false,"error will fix it") ;
+        appointment.setCategory(category);
+        appointment.setProvider(user);
 
-    //  }
+        return   appointmentRepository.save(appointment);
 
 
     }
 
     @Override
-    public ApiResponse updateAppointment(CreateAppointment createAppointment ,Long id) {
-        try {
+    public Appointment updateAppointment(CreateAppointment createAppointment ,Long id) throws NotFoundException {
 
-            Appointment appointment = appointmentRepository.getById(id);
+           Appointment appointment = appointmentRepository.getById(id);
 
            if(appointment!=null){
                appointment.setStartTime(createAppointment.getStartTime());
                appointment.setEndTime(createAppointment.getEndTime());
                appointment.setDuration(createAppointment.getDuration());
                appointment.setLocation(createAppointment.getLocation());
-
-               Appointment appointment2 =appointmentRepository.save(appointment);
-               System.out.println(appointment2);
-               return   new ApiResponse(true,"we updated it") ;
            }
 
+           Category category = categoryRepository.findById(createAppointment.getCategoryId()).orElseThrow(()->
+                   new NotFoundException("category not found")
+           );
 
-            return   new ApiResponse(false,"Appointment doesn't exist") ;
+           appointment.setCategory(category);
 
-
-
-        }catch (Exception e){
-            System.out.println(e);
-            return   new ApiResponse(false,"error not pudated fix it") ;
-
-        }
-
+           return   appointmentRepository.save(appointment);
     }
 
     @Override

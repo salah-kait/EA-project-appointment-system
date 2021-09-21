@@ -1,16 +1,19 @@
 package edu.miu.cs.cs544.appointment.Models.appointment;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Embeddable;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 
-@Embeddable
+@Entity
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
 public class Category {
+    @Id
+    @GeneratedValue
+    private Long id;
     private String title;
     private Long defualtDuration;
 

@@ -21,7 +21,7 @@ public class Appointment {
     private Long id;
     private LocalDate startTime;
     private LocalDate endTime;
-    @Embedded
+    @OneToOne
     private Category category;
 
     private Long duration;
@@ -42,12 +42,12 @@ private List<Reservation> resevationList;
         this.category= category;
 
     }
-    public Appointment(LocalDate startTime, LocalDate endTime, Long duration, String location,Category category) {
+    public Appointment(LocalDate startTime, LocalDate endTime, Long duration, String location) {
         this.startTime = startTime;
         this.endTime = endTime;
         this.duration = duration;
         this.location = location;
-        this.category= category;
+        //this.category= category;
 
 
 
