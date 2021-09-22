@@ -80,6 +80,9 @@ public class ReservationService {
                     new NotFoundException("appointment not found")
             );
 
+            // ToDo: check if the user is the right provider
+
+
             reservation1.setAppointment(appointment);
             reservation1.setReservationDateTime(createReservation.getReservationDateTime());
 //            reservation1.setStatus(ReservationStatus.PENDING);
@@ -97,6 +100,8 @@ public class ReservationService {
                 new NotFoundException("appointment not found")
         );
 
+        // ToDo: check if the user is the right provider
+
         return reservation;
     }
 
@@ -109,6 +114,9 @@ public class ReservationService {
         Reservation reservation = reservationRepository.findById(id).orElseThrow(() ->
                 new NotFoundException("reservation not found")
         );
+
+
+        // ToDo: check if the user is the right provider
 
         Long appointmentId = reservation.getAppointment().getId();
 
@@ -124,6 +132,9 @@ public class ReservationService {
     }
 
     public Reservation cancelReservation(Long id) throws NotFoundException {
+
+        // ToDo: check if the user is the right provider
+
         Reservation reservation = reservationRepository.findById(id).orElseThrow(() ->
                     new NotFoundException("reservation not found")
                 );
