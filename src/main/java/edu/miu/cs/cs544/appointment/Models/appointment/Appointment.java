@@ -1,5 +1,7 @@
 package edu.miu.cs.cs544.appointment.Models.appointment;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
@@ -39,6 +41,7 @@ public class Appointment {
     private User provider;
 
     @OneToMany(mappedBy = "appointment")
+    @JsonBackReference
     private List<Reservation> resevationList;
 
     public Appointment(Category category,LocalDateTime startTime, LocalDateTime endTime, Long duration, String location, User provider) {

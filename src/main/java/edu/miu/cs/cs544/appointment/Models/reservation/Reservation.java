@@ -1,7 +1,9 @@
 package edu.miu.cs.cs544.appointment.Models.reservation;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import edu.miu.cs.cs544.appointment.Models.User;
 import edu.miu.cs.cs544.appointment.Models.appointment.Appointment;
 import lombok.AccessLevel;
@@ -37,11 +39,11 @@ public class Reservation {
 
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JsonIgnore
+    @JsonManagedReference
     private User user;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JsonIgnore
+    @JsonManagedReference
     private Appointment appointment;
 
     public Reservation(){}

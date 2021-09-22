@@ -94,8 +94,6 @@ public class ReservationService {
                     new NotFoundException("appointment not found")
             );
 
-            // ToDo: check if the user is the right provider
-
 
             reservation1.setAppointment(appointment);
             reservation1.setReservationDateTime(LocalDateTime.now());
