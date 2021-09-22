@@ -13,9 +13,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-
-import java.net.URI;
 
 
 @RestController
@@ -26,7 +23,7 @@ public class ReservationController{
     private ReservationService reservationService;
 
     // Create user activation
-    @PreAuthorize("hasRole('ADMIN') OR hasRole('PROVIDER') OR hasRole('CLIENT')")
+    @PreAuthorize("hasRole('CLIENT')")
     @PostMapping
     public ResponseEntity<?> createReservation(@RequestBody CreateReservation reservation, @CurrentUser UserPrincipal userPrincipal) {
         try {
@@ -37,7 +34,6 @@ public class ReservationController{
 
 
     }
-
 
     // Get a reservation by Id
     @GetMapping("/{id}")
@@ -56,28 +52,7 @@ public class ReservationController{
     @GetMapping(params = "paged=true")
     @PreAuthorize("hasRole('ADMIN') OR hasRole('PROVIDER') OR hasRole('CLIENT')")
     public Page<Reservation> getReservations(Pageable pageable, @CurrentUser UserPrincipal userPrincipal){
-        return reservationService.getAllReservations(pageable, userPrincipal.getId());
-
-    }
-
-
-    // Update reservation
-    @PutMapping("{id}")
-    @PreAuthorize("hasRole('ADMIN') OR hasRole('PROVIDER') OR hasRole('CLIENT')")
-    public ResponseEntity<Reservation> updateReservation(@PathVariable Long id, CreateReservation createReservation){
-        try {
-            Reservation result = reservationService.updateReservation(id, createReservation);
-
-            if(result != null){
-                return ResponseEntity.ok(result);
-            }else{
-                return ResponseEntity.badRequest().build();
-            }
-        }catch (NotFoundException e){
-            return ResponseEntity.badRequest().build();
-        }
-
-
+        return reservationService.getUserReservations(pageable, userPrincipal.getId());
     }
 
     @PreAuthorize("hasRole('ADMIN') OR hasRole('PROVIDER')")

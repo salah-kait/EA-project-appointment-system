@@ -79,33 +79,11 @@ public class ReservationService {
      * @param userId
      * @return
      */
-    public Page<Reservation> getAllReservations(Pageable pageable, Long userId){
+    public Page<Reservation> getUserReservations(Pageable pageable, Long userId){
         Page<Reservation> reservations = reservationRepository.findByUserId(pageable, userId);
         return reservations;
     }
-
-
-    public Reservation updateReservation(Long id, CreateReservation createReservation) throws NotFoundException {
-        Reservation reservation1 = null;
-        if (getReservation(id) != null) {
-            reservation1 = getReservation(id);
-
-            Appointment appointment = appointmentRepository.findById(createReservation.getAppointmentId()).orElseThrow(() ->
-                    new NotFoundException("appointment not found")
-            );
-
-
-            reservation1.setAppointment(appointment);
-            reservation1.setReservationDateTime(LocalDateTime.now());
-            reservation1.setStatus(ReservationStatus.PENDING);
-
-            reservationRepository.save(reservation1);
-
-            return reservation1;
-
-        } else
-            return reservation1;
-    }
+    
 
     public Reservation getReservation(Long id) throws NotFoundException {
         Reservation reservation = reservationRepository.findById(id).orElseThrow(() ->

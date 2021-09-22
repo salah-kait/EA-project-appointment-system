@@ -10,10 +10,10 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 @Service
 public interface AppointmentService {
-     Appointment createAppointment(CreateAppointment createAppointment, Long id) throws NotFoundException;
+    Appointment createAppointment(CreateAppointment createAppointment, Long id) throws NotFoundException;
     Appointment updateAppointment(CreateAppointment createAppointment, Long id) throws NotFoundException;
-     List<Reservation> allResevations(Long appointmentId);
-    ApiResponse DeleteAppointment(Long appointmentId);
+    List<Reservation> allResevations(Long appointmentId);
+    Boolean DeleteAppointment(Long appointmentId) throws NotFoundException;
     List<Reservation> allResevationsByStatus(Long appointmentId,String status);
     List<Appointment> getAllAppointements();
 

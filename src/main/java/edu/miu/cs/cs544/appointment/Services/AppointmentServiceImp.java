@@ -64,15 +64,15 @@ public class AppointmentServiceImp implements AppointmentService {
     @Override
     public Appointment updateAppointment(CreateAppointment createAppointment, Long id) throws NotFoundException {
 
-        Appointment appointment = appointmentRepository.getById(id);
+        Appointment appointment = appointmentRepository.findById(id).orElseThrow(() ->
+                new NotFoundException("Appointment not found")
+        );
 
-        if (appointment != null) {
-            appointment.setStartTime(createAppointment.getStartTime());
-            appointment.setEndTime(createAppointment.getEndTime());
-            appointment.setLocation(createAppointment.getLocation());
-        } else {
-            new NotFoundException("appointment not found");
-        }
+        checkOwnerUserEligibility(appointment);
+
+        appointment.setStartTime(createAppointment.getStartTime());
+        appointment.setEndTime(createAppointment.getEndTime());
+        appointment.setLocation(createAppointment.getLocation());
 
         Category category = categoryRepository.findById(createAppointment.getCategoryId()).orElseThrow(() ->
                 new NotFoundException("category not found")
@@ -84,18 +84,9 @@ public class AppointmentServiceImp implements AppointmentService {
             appointment.setDuration(category.getDefualtDuration());
         }
 
-        // check if the appointment is the user's
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserPrincipal currentUser = (UserPrincipal) authentication.getPrincipal();
-        if (appointment.getProvider().getId() != currentUser.getId()) {
-            throw new BadRequestException("unauthorized access detected");
-
-        }
         appointment.setCategory(category);
         return appointmentRepository.save(appointment);
-
     }
-
 
     @Override
     public List<Reservation> allResevations(Long appointmentId) {
@@ -104,13 +95,14 @@ public class AppointmentServiceImp implements AppointmentService {
     }
 
     @Override
-    public ApiResponse DeleteAppointment(Long appointmentId) {
-        Appointment appointment = appointmentRepository.getById(appointmentId);
-        if (appointment != null) {
-            appointmentRepository.delete(appointment);
-            return new ApiResponse(true, "Deleted");
-        }
-        return new ApiResponse(false, "Not found");
+    public Boolean DeleteAppointment(Long appointmentId) throws NotFoundException {
+        Appointment appointment = appointmentRepository.findById(appointmentId).orElseThrow(() ->
+                new NotFoundException("Appointment not found")
+        );
+
+        checkOwnerUserEligibility(appointment);
+        appointmentRepository.delete(appointment);
+        return true;
     }
 
     @Override
@@ -121,5 +113,16 @@ public class AppointmentServiceImp implements AppointmentService {
     @Override
     public List<Appointment> getAllAppointements() {
         return appointmentRepository.findAll();
+    }
+
+
+    public void checkOwnerUserEligibility(Appointment appointment){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserPrincipal currentUser = (UserPrincipal)authentication.getPrincipal();
+
+        Boolean isAdmin = currentUser.getAuthorities().stream().anyMatch(ga -> ga.getAuthority().equals("ROLE_ADMIN"));
+        if(!isAdmin &&  (appointment.getProvider().getId() != currentUser.getId()) ){
+            throw new BadRequestException("unauthorized access detected");
+        }
     }
 }
