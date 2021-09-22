@@ -18,7 +18,6 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class CreateReservation {
 
-    @NotBlank
     @Enumerated(EnumType.STRING)
     private ReservationStatus reservationStatus;
 

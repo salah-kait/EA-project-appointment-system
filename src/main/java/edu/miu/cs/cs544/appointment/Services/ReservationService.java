@@ -20,6 +20,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -52,6 +53,14 @@ public class ReservationService {
         );
 
 
+        if(isAlreadyRequested(appointment.getId(), userId)){
+            throw new BadRequestException("You already requested a reservation to this appointment");
+        }
+
+
+        createReservation.setReservationDateTime(LocalDateTime.now());
+        createReservation.setReservationStatus(ReservationStatus.PENDING);
+
         Reservation reservation = new Reservation(
                 createReservation.getReservationStatus(),
                 createReservation.getReservationDateTime()
@@ -75,6 +84,7 @@ public class ReservationService {
         return reservations;
     }
 
+
     public Reservation updateReservation(Long id, CreateReservation createReservation) throws NotFoundException {
         Reservation reservation1 = null;
         if (getReservation(id) != null) {
@@ -88,7 +98,8 @@ public class ReservationService {
 
 
             reservation1.setAppointment(appointment);
-            reservation1.setReservationDateTime(createReservation.getReservationDateTime());
+            reservation1.setReservationDateTime(LocalDateTime.now());
+            reservation1.setStatus(ReservationStatus.PENDING);
 
             reservationRepository.save(reservation1);
 
@@ -144,8 +155,12 @@ public class ReservationService {
                     new NotFoundException("reservation not found")
                 );
 
-        checkUserEligibility(reservation);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserPrincipal currentUser = (UserPrincipal)authentication.getPrincipal();
 
+        if(reservation.getUser().getId() != currentUser.getId()){
+            throw new BadRequestException("unauthorized access detected");
+        }
         reservation.setStatus(ReservationStatus.CANCELED);
         return reservationRepository.save(reservation);
     }
@@ -161,6 +176,17 @@ public class ReservationService {
         if(reservation.getAppointment().getProvider().getId() != currentUser.getId()){
             throw new BadRequestException("unauthorized access detected");
         }
+    }
+
+
+    public boolean isAlreadyRequested(Long appointmentId, Long userId){
+        List<Reservation> reservations = reservationRepository.findByAppointmentIdAndUserId(appointmentId, userId);
+
+        if(reservations.size() > 0){
+            return true;
+        }
+
+        return false;
     }
 
 }

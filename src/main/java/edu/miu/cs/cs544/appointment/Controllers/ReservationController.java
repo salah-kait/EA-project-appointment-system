@@ -26,7 +26,7 @@ public class ReservationController{
     private ReservationService reservationService;
 
     // Create user activation
-    @PreAuthorize("hasRole('CLIENT')")
+    @PreAuthorize("hasRole('ADMIN') OR hasRole('PROVIDER') OR hasRole('CLIENT')")
     @PostMapping
     public ResponseEntity<?> createReservation(@RequestBody CreateReservation reservation, @CurrentUser UserPrincipal userPrincipal) {
         try {
@@ -41,6 +41,7 @@ public class ReservationController{
 
     // Get a reservation by Id
     @GetMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN') OR hasRole('PROVIDER') OR hasRole('CLIENT')")
     public ResponseEntity<?> getReservation(@PathVariable Long id){
         try {
             Reservation reservation = reservationService.getReservation(id);
@@ -53,7 +54,7 @@ public class ReservationController{
 
     // Get list of reservation(Paginated)
     @GetMapping(params = "paged=true")
-    @PreAuthorize("hasRole('PROVIDER') OR hasRole('CLIENT')")
+    @PreAuthorize("hasRole('ADMIN') OR hasRole('PROVIDER') OR hasRole('CLIENT')")
     public Page<Reservation> getReservations(Pageable pageable, @CurrentUser UserPrincipal userPrincipal){
         return reservationService.getAllReservations(pageable, userPrincipal.getId());
 
@@ -79,7 +80,7 @@ public class ReservationController{
 
     }
 
-    @PreAuthorize("hasRole('PROVIDER')")
+    @PreAuthorize("hasRole('ADMIN') OR hasRole('PROVIDER')")
     @PatchMapping(path = "/admit/{id}")
     public ResponseEntity<Reservation> acceptReservation(@PathVariable Long id){
         try {
@@ -93,7 +94,7 @@ public class ReservationController{
         }
     }
 
-    @PreAuthorize("hasRole('PROVIDER') OR hasRole('CLIENT')")
+    @PreAuthorize("hasRole('ADMIN') OR hasRole('CLIENT')")
     @PatchMapping(path = "/cancel/{id}")
     public ResponseEntity<Reservation> cancelReservation(@PathVariable Long id){
 

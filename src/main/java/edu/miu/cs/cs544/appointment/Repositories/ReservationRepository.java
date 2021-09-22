@@ -14,5 +14,7 @@ import java.util.Optional;
 public interface ReservationRepository extends JpaRepository<Reservation, Long> {
     List<Reservation> findByAppointmentIdAndStatus(Long appointment_id, ReservationStatus status);
     Page<Reservation> findByUserId(Pageable pageable, Long id);
+    List<Reservation> findByUserId(Long id);
+    List<Reservation> findByAppointmentIdAndUserId(Long appointment_id, Long user_id);
 
 }
