@@ -1,5 +1,6 @@
 package edu.miu.cs.cs544.appointment.Controllers;
 
+import edu.miu.cs.cs544.appointment.Exception.BadRequestException;
 import edu.miu.cs.cs544.appointment.Models.reservation.Reservation;
 import edu.miu.cs.cs544.appointment.Security.CurrentUser;
 import edu.miu.cs.cs544.appointment.Security.UserPrincipal;
@@ -39,13 +40,13 @@ public class ReservationController{
 
 
     // Get a reservation by Id
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<?> getReservation(@PathVariable Long id){
         try {
             Reservation reservation = reservationService.getReservation(id);
             return ResponseEntity.ok(reservation);
         }catch (NotFoundException notFoundException){
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().body("reservation not found");
         }
     }
 
@@ -86,6 +87,8 @@ public class ReservationController{
         }catch (NotFoundException e){
             return ResponseEntity.badRequest().build();
         }catch (IllegalStateException illegalStateException){
+            return ResponseEntity.badRequest().build();
+        }catch (BadRequestException badRequestException){
             return ResponseEntity.badRequest().build();
         }
     }

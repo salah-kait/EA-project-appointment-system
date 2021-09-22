@@ -12,6 +12,7 @@ import edu.miu.cs.cs544.appointment.Payload.Requests.CreateReservation;
 import edu.miu.cs.cs544.appointment.Repositories.AppointmentRepository;
 import edu.miu.cs.cs544.appointment.Repositories.ReservationRepository;
 import edu.miu.cs.cs544.appointment.Repositories.UserRepository;
+import edu.miu.cs.cs544.appointment.Security.UserPrincipal;
 import edu.miu.cs.cs544.appointment.Services.ReservationService;
 import javassist.NotFoundException;
 import org.junit.Assert;
@@ -26,13 +27,16 @@ import static org.mockito.Mockito.when;
 
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class ReservationServiceUnitTest {
 
@@ -57,6 +61,7 @@ public class ReservationServiceUnitTest {
     User user1, user2, user3, user4;
     Appointment appointment;
     CreateReservation createReservation1, createReservation2, createReservation3, createReservation4;
+    UserPrincipal user1Principal;
 
     Reservation reservation1, reservation2, reservation3, reservation4;
 
@@ -70,6 +75,11 @@ public class ReservationServiceUnitTest {
         category = new Category("TM", 60L);
         user1 = new User("test1", "test1", "test@mail.com", "1234");
         user1.setRoles(new HashSet<Role>(Arrays.asList(role_provider)));
+        List<GrantedAuthority> authorities = user1.getRoles().stream().map(role ->
+                new SimpleGrantedAuthority(role.getName().name())
+        ).collect(Collectors.toList());
+        user1Principal = new UserPrincipal(user1.getId(), user1.getName(), user1.getUsername(), user1.getEmail(), user1.getPassword(), authorities);
+
         appointment = new Appointment(category, LocalDateTime.of(2021, 12, 1, 1, 32,3), LocalDateTime.of(2021, 12, 1, 3, 4, 5), 30L, "Berlington", user1);
 
         user2 = new User("test2", "test2", "test2@mail.com", "1234");
@@ -110,6 +120,13 @@ public class ReservationServiceUnitTest {
         when(reservationRepository.findById(3L)).thenReturn(Optional.of(reservation3));
         when(reservationRepository.findById(4L)).thenReturn(Optional.of(reservation4));
 
+        Authentication authentication = Mockito.mock(Authentication.class);
+        // Mockito.whens() for your authorization object
+        SecurityContext securityContext = Mockito.mock(SecurityContext.class);
+        Mockito.when(securityContext.getAuthentication()).thenReturn(authentication);
+        SecurityContextHolder.setContext(securityContext);
+
+        when(authentication.getPrincipal()).thenReturn((UserPrincipal) user1Principal);
 
     }
 

@@ -1,5 +1,6 @@
 package edu.miu.cs.cs544.appointment.Services;
 
+import edu.miu.cs.cs544.appointment.Exception.BadRequestException;
 import edu.miu.cs.cs544.appointment.Models.User;
 import edu.miu.cs.cs544.appointment.Models.reservation.Reservation;
 import edu.miu.cs.cs544.appointment.Models.appointment.Appointment;
@@ -9,10 +10,13 @@ import edu.miu.cs.cs544.appointment.Payload.Response.ApiResponse;
 import edu.miu.cs.cs544.appointment.Repositories.AppointmentRepository;
 import edu.miu.cs.cs544.appointment.Repositories.ReservationRepository;
 import edu.miu.cs.cs544.appointment.Repositories.UserRepository;
+import edu.miu.cs.cs544.appointment.Security.UserPrincipal;
 import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -85,7 +89,6 @@ public class ReservationService {
 
             reservation1.setAppointment(appointment);
             reservation1.setReservationDateTime(createReservation.getReservationDateTime());
-//            reservation1.setStatus(ReservationStatus.PENDING);
 
             reservationRepository.save(reservation1);
 
@@ -97,15 +100,20 @@ public class ReservationService {
 
     public Reservation getReservation(Long id) throws NotFoundException {
         Reservation reservation = reservationRepository.findById(id).orElseThrow(() ->
-                new NotFoundException("appointment not found")
+                new NotFoundException("reservation not found")
         );
 
-        // ToDo: check if the user is the right provider
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserPrincipal currentUser = (UserPrincipal)authentication.getPrincipal();
+
+        if(reservation.getUser().getId() != currentUser.getId()){
+            throw new BadRequestException("unauthorized access detected");
+        }
 
         return reservation;
     }
 
-    public List<Reservation> getReservationByAppointmentAndStatus(Long appointment_id, String status){
+    public List<Reservation> getReservationByAppointmentAndStatus(Long appointment_id, ReservationStatus status){
         List<Reservation> reservations = reservationRepository.findByAppointmentIdAndStatus(appointment_id, status);
         return reservations;
     }
@@ -115,13 +123,12 @@ public class ReservationService {
                 new NotFoundException("reservation not found")
         );
 
-
-        // ToDo: check if the user is the right provider
+        checkUserEligibility(reservation);
 
         Long appointmentId = reservation.getAppointment().getId();
 
         // get accepted reservation for an appointment
-        List<Reservation> reservationList = getReservationByAppointmentAndStatus(appointmentId, "ACCEPTED");
+        List<Reservation> reservationList = getReservationByAppointmentAndStatus(appointmentId, ReservationStatus.ACCEPTED);
 
         // check if the appointment has already accept a reservation
         if(reservationList.size() > 0){
@@ -133,13 +140,27 @@ public class ReservationService {
 
     public Reservation cancelReservation(Long id) throws NotFoundException {
 
-        // ToDo: check if the user is the right provider
-
         Reservation reservation = reservationRepository.findById(id).orElseThrow(() ->
                     new NotFoundException("reservation not found")
                 );
+
+        checkUserEligibility(reservation);
+
         reservation.setStatus(ReservationStatus.CANCELED);
         return reservationRepository.save(reservation);
+    }
+
+    /**
+     * Check if the user is eligible to certain task
+     * @param reservation
+     */
+    public void checkUserEligibility(Reservation reservation){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserPrincipal currentUser = (UserPrincipal)authentication.getPrincipal();
+
+        if(reservation.getAppointment().getProvider().getId() != currentUser.getId()){
+            throw new BadRequestException("unauthorized access detected");
+        }
     }
 
 }

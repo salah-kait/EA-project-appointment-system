@@ -1,5 +1,6 @@
 package edu.miu.cs.cs544.appointment.Models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -44,6 +45,7 @@ public class User  {
     private String email;
 
     @NotBlank
+    @JsonIgnore
     @Size(max = 100)
     private String password;
 
