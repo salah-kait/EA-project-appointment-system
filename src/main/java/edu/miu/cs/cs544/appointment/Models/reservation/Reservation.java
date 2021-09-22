@@ -28,13 +28,11 @@ public class Reservation {
     @Setter(AccessLevel.NONE)
     private Long id;
 
-//    @NotBlank
+    @NotBlank
     @Enumerated(EnumType.STRING)
-    @Column
     private ReservationStatus status;
 
-//    @NotBlank
-//    @Column
+    @NotBlank
     private LocalDateTime reservationDateTime;
 
 
