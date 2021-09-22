@@ -24,7 +24,6 @@ import java.util.Set;
             "email"
         })
 })
-@JsonIgnoreProperties({"jobSeeker","company"})
 public class User  {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
