@@ -1,6 +1,7 @@
 package edu.miu.cs.cs544.appointment.Models;
 
 import edu.miu.cs.cs544.appointment.Models.enums.RoleName;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.NaturalId;
@@ -12,6 +13,7 @@ import javax.persistence.*;
 @Table(name = "roles")
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
