@@ -44,7 +44,7 @@ public class ReservationService {
         );
 
         User user = userRepository.findById(userId).orElseThrow(() ->
-                new NotFoundException("appointment not found")
+                new NotFoundException("user not found")
         );
 
 
@@ -57,7 +57,6 @@ public class ReservationService {
         reservation.setAppointment(appointment);
 
         return reservationRepository.save(reservation);
-
     }
 
     /**
@@ -93,14 +92,14 @@ public class ReservationService {
             return reservation1;
     }
 
-    public Reservation cancelReservation(Reservation reservation, Long id) {
-
-        if (getReservation(id) != null) {
-            reservation.setStatus(ReservationStatus.CANCELED);
-            return reservationRepository.save(reservation);
-        }
-        return null;
-    }
+//    public Reservation cancelReservation(Reservation reservation, Long id) {
+//
+//        if (getReservation(id) != null) {
+//            reservation.setStatus(ReservationStatus.CANCELED);
+//            return reservationRepository.save(reservation);
+//        }
+//        return null;
+//    }
 
     public Reservation getReservation(Long id) {
         Optional<Reservation> reservation = reservationRepository.findById(id);

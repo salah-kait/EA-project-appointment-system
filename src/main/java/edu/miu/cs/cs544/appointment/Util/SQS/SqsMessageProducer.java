@@ -26,7 +26,7 @@ public class SqsMessageProducer {
 
         log.debug(" Messgae {} " + message);
         log.debug(" Queue name {} " + message.getQueueName());
-        queueMessagingTemplate.convertAndSend(message.getQueueName(), message,headers);
+        queueMessagingTemplate.convertAndSend(message.getQueueName(), message.getMessage(),headers);
     }
     public <T> void send(IQueueMessageDTO message) {
         if (message == null) {
@@ -34,9 +34,9 @@ public class SqsMessageProducer {
             return;
         }
 
-        log.debug(" Messgae {} " + message);
-        log.debug(" Queue name {} " + message.getQueueName());
-        queueMessagingTemplate.convertAndSend(message.getQueueName(), message);
+       log.debug(" Messgae {} " + message.getMessage());
+       log.debug(" Queue name {} " + message.getQueueName());
+        queueMessagingTemplate.convertAndSend(message.getQueueName(),message.getMessage());
     }
 
 }
