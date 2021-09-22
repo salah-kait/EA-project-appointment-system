@@ -42,7 +42,6 @@ public class AppointmentController {
         }catch (Exception e){
             return ResponseEntity.badRequest().body(new ApiResponse(false, e.getMessage()));
         }
-
     }
     @GetMapping("/{id}/reservation")
     @PreAuthorize("hasRole('ADMIN') OR hasRole('PROVIDER')")
