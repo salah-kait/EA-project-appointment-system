@@ -15,6 +15,7 @@ public interface AppointmentService {
      List<Reservation> allResevations(Long appointmentId);
     ApiResponse DeleteAppointment(Long appointmentId);
     List<Reservation> allResevationsByStatus(Long appointmentId,String status);
+    List<Appointment> getAllAppointements();
 
 
 
