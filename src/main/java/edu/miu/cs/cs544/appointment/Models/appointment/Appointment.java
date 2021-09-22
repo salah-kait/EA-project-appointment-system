@@ -30,8 +30,9 @@ public class Appointment {
     private String location;
     @ManyToOne
     private User provider;
-    @OneToMany
-private List<Reservation> resevationList;
+
+    @OneToMany(mappedBy = "appointment")
+    private List<Reservation> resevationList;
 
     public Appointment(Category category,LocalDate startTime, LocalDate endTime, Long duration, String location, User provider) {
         this.startTime = startTime;
