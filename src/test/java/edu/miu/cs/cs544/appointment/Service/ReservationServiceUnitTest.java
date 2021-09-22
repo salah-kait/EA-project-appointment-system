@@ -151,14 +151,6 @@ public class ReservationServiceUnitTest {
     }
 
 
-
-//    @Test
-//    public void getAllReservations(){
-//        Pageable pageable = null;
-//
-//        reservationService.getAllReservations(null, 3L);
-//    }
-
     @Test
     public void acceptReservationTest() throws NotFoundException {
 

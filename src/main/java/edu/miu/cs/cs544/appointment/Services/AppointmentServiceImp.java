@@ -19,8 +19,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
 @Service
-public class AppointmentServiceImp implements AppointmentService{
+public class AppointmentServiceImp implements AppointmentService {
     @Autowired
     private AppointmentRepository appointmentRepository;
     @Autowired
@@ -30,37 +31,38 @@ public class AppointmentServiceImp implements AppointmentService{
 
     @Override
     public Appointment createAppointment(CreateAppointment createAppointment, Long id) throws NotFoundException {
-          Appointment appointment = new Appointment(
-              createAppointment.getStartTime(),
-              createAppointment.getEndTime(),
-              createAppointment.getLocation()
-          );
+        Appointment appointment = new Appointment(
+                createAppointment.getStartTime(),
+                createAppointment.getEndTime(),
+                createAppointment.getDuration(),
+                createAppointment.getLocation()
+        );
 
         User user = userRepository.findById(id).orElseThrow(() ->
                 new NotFoundException("User not found")
         );
 
-        Category category = categoryRepository.findById(createAppointment.getCategoryId()).orElseThrow(()->
+        Category category = categoryRepository.findById(createAppointment.getCategoryId()).orElseThrow(() ->
                 new NotFoundException("catagory not found")
         );
 
 
-        if(createAppointment.getDuration()!=null){
+        if (createAppointment.getDuration() != null) {
             appointment.setDuration(createAppointment.getDuration());
-        }else{
+        } else {
             appointment.setDuration(category.getDefualtDuration());
         }
 
         appointment.setCategory(category);
         appointment.setProvider(user);
 
-        return   appointmentRepository.save(appointment);
+        return appointmentRepository.save(appointment);
 
 
     }
 
     @Override
-    public Appointment updateAppointment(CreateAppointment createAppointment ,Long id) throws NotFoundException {
+    public Appointment updateAppointment(CreateAppointment createAppointment, Long id) throws NotFoundException {
 
         Appointment appointment = appointmentRepository.getById(id);
 
@@ -85,31 +87,30 @@ public class AppointmentServiceImp implements AppointmentService{
         // check if the appointment is the user's
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserPrincipal currentUser = (UserPrincipal) authentication.getPrincipal();
-        if(appointment.getProvider().getId() != currentUser.getId()) {
+        if (appointment.getProvider().getId() != currentUser.getId()) {
             throw new BadRequestException("unauthorized access detected");
 
         }
         appointment.setCategory(category);
-        return   appointmentRepository.save(appointment);
+        return appointmentRepository.save(appointment);
 
     }
 
 
-
     @Override
     public List<Reservation> allResevations(Long appointmentId) {
-        Appointment appointment =appointmentRepository.getById(appointmentId);
+        Appointment appointment = appointmentRepository.getById(appointmentId);
         return appointment.getResevationList();
     }
 
     @Override
     public ApiResponse DeleteAppointment(Long appointmentId) {
-        Appointment appointment= appointmentRepository.getById(appointmentId);
-        if(appointment!=null){
+        Appointment appointment = appointmentRepository.getById(appointmentId);
+        if (appointment != null) {
             appointmentRepository.delete(appointment);
-            return new ApiResponse(true,"Deleted") ;
+            return new ApiResponse(true, "Deleted");
         }
-        return new ApiResponse(false,"Not found") ;
+        return new ApiResponse(false, "Not found");
     }
 
     @Override

@@ -8,8 +8,10 @@ import edu.miu.cs.cs544.appointment.Models.appointment.Category;
 import edu.miu.cs.cs544.appointment.Models.enums.RoleName;
 import edu.miu.cs.cs544.appointment.Payload.Requests.CreateAppointment;
 import edu.miu.cs.cs544.appointment.Repositories.AppointmentRepository;
+import edu.miu.cs.cs544.appointment.Repositories.CategoryRepository;
 import edu.miu.cs.cs544.appointment.Repositories.UserRepository;
 import edu.miu.cs.cs544.appointment.Services.AppointmentService;
+import edu.miu.cs.cs544.appointment.Services.AppointmentServiceImp;
 import javassist.NotFoundException;
 import org.junit.Assert;
 import org.junit.Before;
@@ -25,10 +27,10 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.when;
 
-class AppointmentServiceTest {
+public class AppointmentServiceTest {
 
     @InjectMocks
-    AppointmentService appointmentService;
+    AppointmentServiceImp appointmentService;
 
     @Mock
     AppointmentRepository appointmentRepository;
@@ -36,12 +38,15 @@ class AppointmentServiceTest {
     @Mock
     UserRepository userRepository;
 
+    @Mock
+    CategoryRepository categoryRepository;
+
     @Captor
     ArgumentCaptor<Appointment> appointmentArgumentCaptor;
 
 
     Role role_provider, role_client;
-    Category category;
+    Category category, category2;
     User user1, user2, user3, user4;
     Appointment appointment;
     CreateAppointment createAppointment1, createAppointment2, createAppointment3, createAppointment4;
@@ -78,13 +83,13 @@ class AppointmentServiceTest {
 
         createAppointment4 = new CreateAppointment(LocalDateTime.now(), LocalDateTime.now(), 3L, "DC",1l);
 
-        appointment1 = new Appointment(LocalDateTime.now(), LocalDateTime.now(), "DC");
+        appointment1 = new Appointment(LocalDateTime.now(), LocalDateTime.now(),30L, "DC");
 
-        appointment2 = new Appointment(LocalDateTime.now(), LocalDateTime.now(), "DC");
+        appointment2 = new Appointment(LocalDateTime.now(), LocalDateTime.now(),15L, "DC");
 
-        appointment3 = new Appointment(LocalDateTime.now(), LocalDateTime.now(), "DC");
+        appointment3 = new Appointment(LocalDateTime.now(), LocalDateTime.now(),15L, "DC");
 
-        appointment4 = new Appointment(LocalDateTime.now(), LocalDateTime.now(), "DC");
+        appointment4 = new Appointment(LocalDateTime.now(), LocalDateTime.now(),15L, "DC");
 
 
         when(appointmentRepository.findById(1L)).thenReturn(Optional.of(appointment));
@@ -98,6 +103,8 @@ class AppointmentServiceTest {
         when(appointmentRepository.findById(3L)).thenReturn(Optional.of(appointment3));
         when(appointmentRepository.findById(4L)).thenReturn(Optional.of(appointment4));
 
+        when(categoryRepository.findById(1L)).thenReturn(Optional.ofNullable(category));
+
 
     }
 
@@ -105,7 +112,7 @@ class AppointmentServiceTest {
     public void createAppointmentTest() throws NotFoundException {
 
 
-        CreateAppointment createAppointment = new CreateAppointment(LocalDateTime.now(), LocalDateTime.now(), 3L, "DC",1l);
+        CreateAppointment createAppointment = new CreateAppointment(LocalDateTime.now(), LocalDateTime.now(), 3L, "DC",1L);
 
 
         appointmentService.createAppointment(createAppointment, 2L);
@@ -117,7 +124,6 @@ class AppointmentServiceTest {
         Assert.assertNotNull(result);
         assertEquals(user2, result.getProvider());
         assertEquals(createAppointment.getDuration(), result.getDuration());
-        assertEquals(createAppointment.getCategoryId(), result.getCategory().getId());
         assertEquals(createAppointment.getLocation(), result.getLocation());
 
     }
