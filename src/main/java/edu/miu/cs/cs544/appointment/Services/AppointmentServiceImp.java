@@ -1,5 +1,6 @@
 package edu.miu.cs.cs544.appointment.Services;
 
+import edu.miu.cs.cs544.appointment.Exception.BadRequestException;
 import edu.miu.cs.cs544.appointment.Models.User;
 import edu.miu.cs.cs544.appointment.Models.appointment.Category;
 import edu.miu.cs.cs544.appointment.Models.reservation.Reservation;
@@ -10,8 +11,11 @@ import edu.miu.cs.cs544.appointment.Payload.Response.ApiResponse;
 import edu.miu.cs.cs544.appointment.Repositories.AppointmentRepository;
 import edu.miu.cs.cs544.appointment.Repositories.CategoryRepository;
 import edu.miu.cs.cs544.appointment.Repositories.UserRepository;
+import edu.miu.cs.cs544.appointment.Security.UserPrincipal;
 import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -40,6 +44,7 @@ public class AppointmentServiceImp implements AppointmentService{
                 new NotFoundException("catagory not found")
         );
 
+
         if(createAppointment.getDuration()!=null){
             appointment.setDuration(createAppointment.getDuration());
         }else{
@@ -57,30 +62,39 @@ public class AppointmentServiceImp implements AppointmentService{
     @Override
     public Appointment updateAppointment(CreateAppointment createAppointment ,Long id) throws NotFoundException {
 
-           Appointment appointment = appointmentRepository.getById(id);
+        Appointment appointment = appointmentRepository.getById(id);
 
-           if(appointment!=null){
-               appointment.setStartTime(createAppointment.getStartTime());
-               appointment.setEndTime(createAppointment.getEndTime());
-               appointment.setLocation(createAppointment.getLocation());
-           }else{
-               new NotFoundException("appointment not found");
-           }
+        if (appointment != null) {
+            appointment.setStartTime(createAppointment.getStartTime());
+            appointment.setEndTime(createAppointment.getEndTime());
+            appointment.setLocation(createAppointment.getLocation());
+        } else {
+            new NotFoundException("appointment not found");
+        }
 
-           Category category = categoryRepository.findById(createAppointment.getCategoryId()).orElseThrow(()->
-                   new NotFoundException("category not found")
-           );
+        Category category = categoryRepository.findById(createAppointment.getCategoryId()).orElseThrow(() ->
+                new NotFoundException("category not found")
+        );
 
-           if(createAppointment.getDuration()!=null){
-               appointment.setDuration(createAppointment.getDuration());
-           }else{
-               appointment.setDuration(category.getDefualtDuration());
-           }
+        if (createAppointment.getDuration() != null) {
+            appointment.setDuration(createAppointment.getDuration());
+        } else {
+            appointment.setDuration(category.getDefualtDuration());
+        }
 
-           appointment.setCategory(category);
+        // check if the appointment is the user's
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserPrincipal currentUser = (UserPrincipal) authentication.getPrincipal();
+        if(appointment.getProvider().getId() != currentUser.getId()) {
+            throw new BadRequestException("unauthorized access detected");
 
-           return   appointmentRepository.save(appointment);
+        }
+        appointment.setCategory(category);
+        return   appointmentRepository.save(appointment);
+
     }
+
+
 
     @Override
     public List<Reservation> allResevations(Long appointmentId) {
