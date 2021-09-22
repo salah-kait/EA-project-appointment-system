@@ -1,17 +1,19 @@
 package edu.miu.cs.cs544.appointment.Controllers;
 
 
+import edu.miu.cs.cs544.appointment.Models.appointment.Appointment;
 import edu.miu.cs.cs544.appointment.Models.reservation.Reservation;
 import edu.miu.cs.cs544.appointment.Payload.Requests.CreateAppointment;
 import edu.miu.cs.cs544.appointment.Payload.Response.ApiResponse;
 import edu.miu.cs.cs544.appointment.Security.CurrentUser;
 import edu.miu.cs.cs544.appointment.Security.UserPrincipal;
 import edu.miu.cs.cs544.appointment.Services.AppointmentService;
-import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -58,14 +60,8 @@ public class AppointmentController {
         }
     }
 
-    @GetMapping
-    @PreAuthorize("hasRole('ADMIN') OR hasRole('PROVIDER')")
-    ResponseEntity<?> getAllAppointements(){
-        try {
-            return  ResponseEntity.ok(appointmentServiceImp.getAllAppointements());
-        }catch (Exception e){
-            return ResponseEntity.internalServerError().build();
-        }
+    @GetMapping(params = "paged=true")
+    Page<Appointment> getAllAppointements(Pageable pageable){
+        return  appointmentServiceImp.getAllAppointments(pageable);
     }
-
 }

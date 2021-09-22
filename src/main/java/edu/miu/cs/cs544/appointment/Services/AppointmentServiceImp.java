@@ -14,6 +14,8 @@ import edu.miu.cs.cs544.appointment.Repositories.UserRepository;
 import edu.miu.cs.cs544.appointment.Security.UserPrincipal;
 import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -111,8 +113,8 @@ public class AppointmentServiceImp implements AppointmentService {
     }
 
     @Override
-    public List<Appointment> getAllAppointements() {
-        return appointmentRepository.findAll();
+    public Page<Appointment> getAllAppointments(Pageable pageable) {
+        return appointmentRepository.findAll(pageable);
     }
 
 
