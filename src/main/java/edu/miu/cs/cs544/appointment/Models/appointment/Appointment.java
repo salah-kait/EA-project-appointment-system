@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -25,6 +26,7 @@ public class Appointment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @NotBlank
     private LocalDateTime startTime;
     private LocalDateTime endTime;
     @ManyToOne
@@ -38,25 +40,11 @@ public class Appointment {
     @ManyToOne
     private User provider;
     @OneToMany
-private List<Reservation> resevationList;
+    private List<Reservation> resevationList;
 
-    public Appointment(Category category,LocalDateTime startTime, LocalDateTime endTime, Long duration, String location, User provider) {
-        this.startTime = startTime;
-        this.endTime = endTime;
-        this.duration = duration;
-        this.location = location;
-        this.provider = provider;
-        this.category= category;
-
-    }
     public Appointment(LocalDateTime startTime, LocalDateTime endTime, String location) {
         this.startTime = startTime;
         this.endTime = endTime;
-//        this.duration = duration;
         this.location = location;
-        //this.category= category;
-
-
-
     }
 }
