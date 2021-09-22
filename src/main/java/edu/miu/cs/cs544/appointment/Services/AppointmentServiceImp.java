@@ -37,7 +37,7 @@ public class AppointmentServiceImp implements AppointmentService{
                 new NotFoundException("User not found")
         );
 
-        Category category = categoryRepository.findById(id).orElseThrow(()->
+        Category category = categoryRepository.findById(createAppointment.getCategoryId()).orElseThrow(()->
                 new NotFoundException("catagory not found")
         );
 
@@ -86,5 +86,10 @@ public class AppointmentServiceImp implements AppointmentService{
     @Override
     public List<Reservation> allResevationsByStatus(Long appointmentId, String status) {
         return null;
+    }
+
+    @Override
+    public List<Appointment> getAllAppointements() {
+        return appointmentRepository.findAll();
     }
 }

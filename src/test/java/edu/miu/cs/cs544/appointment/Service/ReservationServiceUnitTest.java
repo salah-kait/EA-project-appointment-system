@@ -28,6 +28,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
@@ -69,7 +70,7 @@ public class ReservationServiceUnitTest {
         category = new Category("TM", 60L);
         user1 = new User("test1", "test1", "test@mail.com", "1234");
         user1.setRoles(new HashSet<Role>(Arrays.asList(role_provider)));
-        appointment = new Appointment(category, LocalDate.of(2021, 12, 1), LocalDate.of(2021, 12, 1), 30L, "Berlington", user1);
+        appointment = new Appointment(category, LocalDateTime.of(2021, 12, 1, 1, 32,3), LocalDateTime.of(2021, 12, 1, 3, 4, 5), 30L, "Berlington", user1);
 
         user2 = new User("test2", "test2", "test2@mail.com", "1234");
         user2.setRoles(new HashSet<Role>(Arrays.asList(role_client)));
@@ -81,21 +82,21 @@ public class ReservationServiceUnitTest {
         user4.setRoles(new HashSet<Role>(Arrays.asList(role_client)));
 
 
-        createReservation1 = new CreateReservation(ReservationStatus.PENDING, LocalDate.now(), 3L, 1L);
+        createReservation1 = new CreateReservation(ReservationStatus.PENDING, LocalDateTime.now(), 3L, 1L);
 
-        createReservation2 = new CreateReservation(ReservationStatus.PENDING, LocalDate.now(), 3L, 1L);
+        createReservation2 = new CreateReservation(ReservationStatus.PENDING, LocalDateTime.now(), 3L, 1L);
 
-        createReservation3 = new CreateReservation(ReservationStatus.PENDING, LocalDate.now(), 4L, 1L);
+        createReservation3 = new CreateReservation(ReservationStatus.PENDING, LocalDateTime.now(), 4L, 1L);
 
-        createReservation4 = new CreateReservation(ReservationStatus.PENDING, LocalDate.now(), 4L, 1L);
+        createReservation4 = new CreateReservation(ReservationStatus.PENDING, LocalDateTime.now(), 4L, 1L);
 
-        reservation1 = new Reservation(1L, ReservationStatus.PENDING, LocalDate.of(2021, 2, 3), user3, appointment);
+        reservation1 = new Reservation(1L, ReservationStatus.PENDING, LocalDateTime.of(2021, 2, 3, 7, 10, 22), user3, appointment);
 
-        reservation2 = new Reservation(2L, ReservationStatus.PENDING, LocalDate.of(2021, 2, 3), user3, appointment);
+        reservation2 = new Reservation(2L, ReservationStatus.PENDING, LocalDateTime.of(2021, 2, 3, 8, 55, 44), user3, appointment);
 
-        reservation3 = new Reservation(3L, ReservationStatus.PENDING, LocalDate.of(2021, 2, 3), user4, appointment);
+        reservation3 = new Reservation(3L, ReservationStatus.PENDING, LocalDateTime.of(2021, 2, 3, 3, 44, 55), user4, appointment);
 
-        reservation4 = new Reservation(4L, ReservationStatus.PENDING, LocalDate.of(2021, 2, 3), user4, appointment);
+        reservation4 = new Reservation(4L, ReservationStatus.PENDING, LocalDateTime.of(2021, 2, 3, 2, 3, 4), user4, appointment);
 
 
         when(appointmentRepository.findById(1L)).thenReturn(Optional.of(appointment));
@@ -116,7 +117,7 @@ public class ReservationServiceUnitTest {
     public void createReservationTest() throws NotFoundException {
 
 
-        CreateReservation createReservation = new CreateReservation(ReservationStatus.PENDING, LocalDate.now(), 2L, 1L);
+        CreateReservation createReservation = new CreateReservation(ReservationStatus.PENDING, LocalDateTime.now(), 2L, 1L);
 
 
         reservationService.createReservation(createReservation, 2L);
