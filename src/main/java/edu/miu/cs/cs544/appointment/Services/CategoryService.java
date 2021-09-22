@@ -29,9 +29,14 @@ public class CategoryService {
         return   categoryRepository.save(category);
     }
 
-    public Category updateCategory(CreateCategory createCategory) throws NotFoundException {
+    public Category updateCategory(CreateCategory createCategory,Long id) throws NotFoundException {
 
-        Category category = new Category(createCategory.getTitle(),createCategory.getDefualtDuration());
+        Category category = categoryRepository.getById(id);
+
+        if(category!=null){
+           category.setTitle(createCategory.getTitle());
+           category.setDefualtDuration(createCategory.getDefualtDuration());
+        }
 
         return   categoryRepository.save(category);
     }

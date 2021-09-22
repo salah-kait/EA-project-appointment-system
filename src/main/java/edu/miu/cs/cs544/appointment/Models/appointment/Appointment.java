@@ -49,10 +49,10 @@ private List<Reservation> resevationList;
         this.category= category;
 
     }
-    public Appointment(LocalDateTime startTime, LocalDateTime endTime, Long duration, String location) {
+    public Appointment(LocalDateTime startTime, LocalDateTime endTime, String location) {
         this.startTime = startTime;
         this.endTime = endTime;
-        this.duration = duration;
+//        this.duration = duration;
         this.location = location;
         //this.category= category;
 
