@@ -18,7 +18,7 @@ import java.util.List;
 @Service
 public class AppointmentServiceImp implements AppointmentService{
     @Autowired
-  private AppointmentRepository appointmentRepository;
+    private AppointmentRepository appointmentRepository;
     @Autowired
     private UserRepository userRepository;
     @Autowired
@@ -29,7 +29,6 @@ public class AppointmentServiceImp implements AppointmentService{
           Appointment appointment = new Appointment(
               createAppointment.getStartTime(),
               createAppointment.getEndTime(),
-              createAppointment.getDuration(),
               createAppointment.getLocation()
           );
 
@@ -40,6 +39,12 @@ public class AppointmentServiceImp implements AppointmentService{
         Category category = categoryRepository.findById(createAppointment.getCategoryId()).orElseThrow(()->
                 new NotFoundException("catagory not found")
         );
+
+        if(createAppointment.getDuration()!=null){
+            appointment.setDuration(createAppointment.getDuration());
+        }else{
+            appointment.setDuration(category.getDefualtDuration());
+        }
 
         appointment.setCategory(category);
         appointment.setProvider(user);
@@ -57,13 +62,20 @@ public class AppointmentServiceImp implements AppointmentService{
            if(appointment!=null){
                appointment.setStartTime(createAppointment.getStartTime());
                appointment.setEndTime(createAppointment.getEndTime());
-               appointment.setDuration(createAppointment.getDuration());
                appointment.setLocation(createAppointment.getLocation());
+           }else{
+               new NotFoundException("appointment not found");
            }
 
            Category category = categoryRepository.findById(createAppointment.getCategoryId()).orElseThrow(()->
                    new NotFoundException("category not found")
            );
+
+           if(createAppointment.getDuration()!=null){
+               appointment.setDuration(createAppointment.getDuration());
+           }else{
+               appointment.setDuration(category.getDefualtDuration());
+           }
 
            appointment.setCategory(category);
 
@@ -79,8 +91,11 @@ public class AppointmentServiceImp implements AppointmentService{
     @Override
     public ApiResponse DeleteAppointment(Long appointmentId) {
         Appointment appointment= appointmentRepository.getById(appointmentId);
-        appointmentRepository.delete(appointment);
-        return new ApiResponse(true,"Deleted") ;
+        if(appointment!=null){
+            appointmentRepository.delete(appointment);
+            return new ApiResponse(true,"Deleted") ;
+        }
+        return new ApiResponse(false,"Not found") ;
     }
 
     @Override

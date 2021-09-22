@@ -17,7 +17,7 @@ public class CategoryController {
 
     @PostMapping("/api/category")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> createCategory(@RequestBody CreateCategory createCategory, @CurrentUser UserPrincipal userPrincipal){
+    public ResponseEntity<?> createCategory(@RequestBody CreateCategory createCategory){
         try {
             return ResponseEntity.ok(categoryService.createCategory(createCategory));
         } catch (Exception e){
@@ -29,7 +29,7 @@ public class CategoryController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> updateCategory(@RequestBody CreateCategory createCategory ,@PathVariable Long id){
         try {
-            return  ResponseEntity.ok(categoryService.updateCategory(createCategory));
+            return  ResponseEntity.ok(categoryService.updateCategory(createCategory,id));
         } catch (Exception e){
             return ResponseEntity.internalServerError().build();
         }
