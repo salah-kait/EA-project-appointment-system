@@ -92,22 +92,12 @@ public class ReservationService {
             return reservation1;
     }
 
-//    public Reservation cancelReservation(Reservation reservation, Long id) {
-//
-//        if (getReservation(id) != null) {
-//            reservation.setStatus(ReservationStatus.CANCELED);
-//            return reservationRepository.save(reservation);
-//        }
-//        return null;
-//    }
+    public Reservation getReservation(Long id) throws NotFoundException {
+        Reservation reservation = reservationRepository.findById(id).orElseThrow(() ->
+                new NotFoundException("appointment not found")
+        );
 
-    public Reservation getReservation(Long id) {
-        Optional<Reservation> reservation = reservationRepository.findById(id);
-
-        if (reservation.isPresent())
-            return reservation.get();
-        else
-            return null;
+        return reservation;
     }
 
     public List<Reservation> getReservationByAppointmentAndStatus(Long appointment_id, String status){

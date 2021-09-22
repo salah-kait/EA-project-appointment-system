@@ -37,6 +37,19 @@ public class ReservationController{
 
     }
 
+
+    // Get a reservation by Id
+    @GetMapping("{id}")
+    public ResponseEntity<?> getReservation(@PathVariable Long id){
+        try {
+            Reservation reservation = reservationService.getReservation(id);
+            return ResponseEntity.ok(reservation);
+        }catch (NotFoundException notFoundException){
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+
     // Get list of reservation(Paginated)
     @GetMapping(params = "paged=true")
     @PreAuthorize("hasRole('PROVIDER') OR hasRole('CLIENT')")
