@@ -45,4 +45,13 @@ public class CategoryController {
     }
 
 
+    @GetMapping(value = "/api/category", params = "{title}")
+    @PreAuthorize("hasRole('ADMIN')")
+    ResponseEntity<?> getCategoryByTitle(@PathVariable String title){
+        try {
+            return  ResponseEntity.ok(categoryServiceImpl.getCategoryByTitle(title));
+        }catch (Exception e){
+            return ResponseEntity.internalServerError().build();
+        }
+    }
 }
