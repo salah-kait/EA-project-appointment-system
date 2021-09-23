@@ -21,6 +21,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -117,6 +118,11 @@ public class AppointmentServiceImp implements AppointmentService {
     @Override
     public Page<Appointment> getAllAppointments(Pageable pageable) {
         return appointmentRepository.findAll(pageable);
+    }
+
+    @Override
+    public List<Appointment> findAppointmentStartAtDateTime(LocalDateTime startAt) {
+        return appointmentRepository.findAppointmentStartAtDateTime(startAt);
     }
 
 
