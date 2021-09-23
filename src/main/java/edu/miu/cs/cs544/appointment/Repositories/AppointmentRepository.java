@@ -14,9 +14,9 @@ import java.util.List;
 public interface AppointmentRepository extends JpaRepository<Appointment,Long> {
 
     @Query("SELECT distinct a from Appointment a  JOIN a.resevationList r " +
-            " where a.startTime = :startAt" +
+            " where a.startTime >= :startAt1 AND  a.startTime <= :startAt2 " +
             " AND r.status = 'ACCEPTED'")
     List<Appointment> findAppointmentStartAtDateTime(
-            @Param("startAt") LocalDateTime startAt);
+            @Param("startAt1") LocalDateTime startAt1,@Param("startAt2") LocalDateTime startA2 );
 
 }

@@ -121,8 +121,8 @@ public class AppointmentServiceImp implements AppointmentService {
     }
 
     @Override
-    public List<Appointment> findAppointmentStartAtDateTime(LocalDateTime startAt) {
-        return appointmentRepository.findAppointmentStartAtDateTime(startAt);
+    public List<Appointment> findAppointmentStartAtDateTime(LocalDateTime startAt1,LocalDateTime startAt2) {
+        return appointmentRepository.findAppointmentStartAtDateTime(startAt1,startAt2);
     }
 
 

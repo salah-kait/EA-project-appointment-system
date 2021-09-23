@@ -25,8 +25,11 @@ public class AppointmentSchedule{
     @Async
     @Scheduled(fixedRate = 60000)
     public void scheduleFixedRateTask() {
-        System.out.println("Time:"+LocalDateTime.now().plusHours(1));
-        List<Appointment> appointmentList = appointmentService.findAppointmentStartAtDateTime(LocalDateTime.now().plusHours(1));
+
+        LocalDateTime datetime1 =  LocalDateTime.now().plusHours(1);
+        LocalDateTime datetime2 =  datetime1.plusMinutes(1);
+        System.out.println("Time:"+datetime1 +"  AND  "+datetime2);
+        List<Appointment> appointmentList = appointmentService.findAppointmentStartAtDateTime(datetime1,datetime2);
         for (Appointment appointment: appointmentList) {
             emailSender.sendSimpleMessage(appointment.getProvider().getEmail(),"Appointment Reminder","You have an Appointment will start after an Hour");
 

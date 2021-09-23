@@ -20,7 +20,7 @@ public interface AppointmentService {
     Boolean DeleteAppointment(Long appointmentId) throws NotFoundException;
     List<Reservation> allResevationsByStatus(Long appointmentId,String status);
     Page<Appointment> getAllAppointments(Pageable pageable);
-    List<Appointment> findAppointmentStartAtDateTime(LocalDateTime startAt);
+    List<Appointment> findAppointmentStartAtDateTime(LocalDateTime startAt1,LocalDateTime startAt2);
 
 
 
