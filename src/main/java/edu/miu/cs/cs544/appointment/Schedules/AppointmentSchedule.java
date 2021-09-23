@@ -24,8 +24,7 @@ public class AppointmentSchedule{
 
     @Async
     @Scheduled(fixedRate = 60000)
-    public void scheduleFixedRateTask() {
-
+    public void scheduleAppointmentReminder() {
         LocalDateTime datetime1 =  LocalDateTime.now().plusHours(1).withNano(0);
         LocalDateTime datetime2 =  LocalDateTime.now().plusHours(1).plusMinutes(1).withNano(0);
         System.out.println("Time:"+datetime1 +"  AND  "+datetime2);
