@@ -1,5 +1,6 @@
 package edu.miu.cs.cs544.appointment.Models.appointment;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -23,7 +24,7 @@ public class Category {
     private String title;
     private Long defualtDuration;
     @OneToMany(mappedBy = "category")
-    @JsonIgnore
+    @JsonBackReference
     private List<Appointment> appointment;
 
     public Category(String title, Long defualtDuration) {

@@ -2,6 +2,7 @@ package edu.miu.cs.cs544.appointment.Models.appointment;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import edu.miu.cs.cs544.appointment.Models.User;
 import edu.miu.cs.cs544.appointment.Models.reservation.Reservation;
 import lombok.AllArgsConstructor;
@@ -33,6 +34,7 @@ public class Appointment {
     private LocalDateTime endTime;
 
     @ManyToOne
+    @JsonManagedReference
     @JoinColumn(name = "catagoryId")
     private Category category;
 
