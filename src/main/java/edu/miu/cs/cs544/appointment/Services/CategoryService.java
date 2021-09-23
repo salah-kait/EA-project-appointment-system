@@ -1,5 +1,6 @@
 package edu.miu.cs.cs544.appointment.Services;
 
+import edu.miu.cs.cs544.appointment.Exception.BadRequestException;
 import edu.miu.cs.cs544.appointment.Models.User;
 import edu.miu.cs.cs544.appointment.Models.appointment.Appointment;
 import edu.miu.cs.cs544.appointment.Models.appointment.Category;
@@ -11,6 +12,7 @@ import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import java.util.Optional;
 
 import java.util.List;
 
@@ -45,5 +47,15 @@ public class CategoryService {
 
     public List<Category> getAllCategories() {
         return   categoryRepository.findAll();
+    }
+
+    public Category getCategoryByTitle(String title){
+        Optional<Category> category = categoryRepository.findByTitle(title);
+
+        if(category.isPresent()){
+            return category.get();
+        }else {
+            throw  new BadRequestException("category not found");
+        }
     }
 }

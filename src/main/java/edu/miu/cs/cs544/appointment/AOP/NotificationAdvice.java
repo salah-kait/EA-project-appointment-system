@@ -19,7 +19,7 @@ public class NotificationAdvice {
         this.emailSender = emailSender;
     }
 
-    @AfterReturning(value = "execution(* edu.miu.cs.cs544.appointment.Services.AppointmentServiceImp.createAppointment(..))", returning = "appointment")
+    @AfterReturning(value = "execution(* edu.miu.cs.cs544.appointment.Services.AppointmentService.createAppointment(..))", returning = "appointment")
     public void afterReturningAdviceCreateAppointment(JoinPoint joinPoint, Appointment appointment) {
         emailSender.sendSimpleMessage(appointment.getProvider().getEmail(),"You Created An Appointment","You Created An Appointment");
     }
@@ -31,12 +31,12 @@ public class NotificationAdvice {
     }
 
     @Async
-    @AfterReturning(value = "execution(* edu.miu.cs.cs544.appointment.Services.AppointmentServiceImp.updateAppointment(..))", returning = "appointment")
+    @AfterReturning(value = "execution(* edu.miu.cs.cs544.appointment.Services.AppointmentService.updateAppointment(..))", returning = "appointment")
     public void afterReturningAdviceUpdatingAppointment(JoinPoint joinPoint, Appointment appointment) {
         emailSender.sendSimpleMessage(appointment.getProvider().getEmail(),"Appointment Updates","Your Appointment updated");
     }
     @Async
-    @After(value = "execution(* edu.miu.cs.cs544.appointment.Services.AppointmentServiceImp.DeleteAppointment(..))")
+    @After(value = "execution(* edu.miu.cs.cs544.appointment.Services.AppointmentService.DeleteAppointment(..))")
     public void afterReturningAdviceDeleteAppointment(JoinPoint joinPoint) {
         emailSender.sendSimpleMessage("f2@dd.con","delete","appointment deleted");
     }

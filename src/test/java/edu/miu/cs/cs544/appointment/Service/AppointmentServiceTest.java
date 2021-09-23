@@ -11,7 +11,6 @@ import edu.miu.cs.cs544.appointment.Repositories.AppointmentRepository;
 import edu.miu.cs.cs544.appointment.Repositories.CategoryRepository;
 import edu.miu.cs.cs544.appointment.Repositories.UserRepository;
 import edu.miu.cs.cs544.appointment.Services.AppointmentService;
-import edu.miu.cs.cs544.appointment.Services.AppointmentServiceImp;
 import javassist.NotFoundException;
 import org.junit.Assert;
 import org.junit.Before;
@@ -30,7 +29,7 @@ import static org.mockito.Mockito.when;
 public class AppointmentServiceTest {
 
     @InjectMocks
-    AppointmentServiceImp appointmentService;
+    AppointmentService appointmentService;
 
     @Mock
     AppointmentRepository appointmentRepository;
