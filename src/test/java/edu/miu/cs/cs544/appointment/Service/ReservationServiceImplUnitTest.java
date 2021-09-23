@@ -13,35 +13,31 @@ import edu.miu.cs.cs544.appointment.Repositories.AppointmentRepository;
 import edu.miu.cs.cs544.appointment.Repositories.ReservationRepository;
 import edu.miu.cs.cs544.appointment.Repositories.UserRepository;
 import edu.miu.cs.cs544.appointment.Security.UserPrincipal;
-import edu.miu.cs.cs544.appointment.Services.ReservationService;
+import edu.miu.cs.cs544.appointment.Services.ReservationServiceImpl;
 import javassist.NotFoundException;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.*;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.when;
 
-import org.mockito.junit.MockitoJUnitRunner;
-import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class ReservationServiceUnitTest {
+public class ReservationServiceImplUnitTest {
 
     @InjectMocks
-    ReservationService reservationService;
+    ReservationServiceImpl reservationServiceImpl;
 
     @Mock
     ReservationRepository reservationRepository;
@@ -137,7 +133,7 @@ public class ReservationServiceUnitTest {
         CreateReservation createReservation = new CreateReservation(ReservationStatus.PENDING, LocalDateTime.now(), 2L, 1L);
 
 
-        reservationService.createReservation(createReservation, 2L);
+        reservationServiceImpl.createReservation(createReservation, 2L);
 
         then(reservationRepository).should().save(reservationArgumentCaptor.capture());
 
@@ -154,7 +150,7 @@ public class ReservationServiceUnitTest {
     @Test
     public void acceptReservationTest() throws NotFoundException {
 
-        reservationService.acceptReservation(2L);
+        reservationServiceImpl.acceptReservation(2L);
 
         then(reservationRepository).should().save(reservationArgumentCaptor.capture());
 
@@ -170,7 +166,7 @@ public class ReservationServiceUnitTest {
     public void cancelReservationTest() {
 
         try {
-            reservationService.cancelReservation(3L);
+            reservationServiceImpl.cancelReservation(3L);
 
             then(reservationRepository).should().save(reservationArgumentCaptor.capture());
 

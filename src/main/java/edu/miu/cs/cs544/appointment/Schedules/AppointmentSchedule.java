@@ -1,7 +1,7 @@
 package edu.miu.cs.cs544.appointment.Schedules;
 
 import edu.miu.cs.cs544.appointment.Models.appointment.Appointment;
-import edu.miu.cs.cs544.appointment.Services.AppointmentService;
+import edu.miu.cs.cs544.appointment.Services.interfaces.AppointmentService;
 import edu.miu.cs.cs544.appointment.Util.Email.EmailSender;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;

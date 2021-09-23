@@ -25,7 +25,7 @@ public class NotificationAdvice {
     }
 
 
-    @AfterReturning(value = "execution(* edu.miu.cs.cs544.appointment.Services.UserService.save(..))", returning = "user")
+    @AfterReturning(value = "execution(* edu.miu.cs.cs544.appointment.Services.interfaces.UserService.save(..))", returning = "user")
     public void afterReturningAdviceCreateUser(JoinPoint joinPoint, User user) {
         emailSender.sendSimpleMessage(user.getEmail(),"Welcome To Appointment System","Welcome To Appointment System");
     }

@@ -1,12 +1,10 @@
 package edu.miu.cs.cs544.appointment.Services;
 
-import edu.miu.cs.cs544.appointment.Models.User;
-import edu.miu.cs.cs544.appointment.Models.appointment.Appointment;
 import edu.miu.cs.cs544.appointment.Models.appointment.Category;
-import edu.miu.cs.cs544.appointment.Payload.Requests.CreateAppointment;
 import edu.miu.cs.cs544.appointment.Payload.Requests.CreateCategory;
 import edu.miu.cs.cs544.appointment.Repositories.CategoryRepository;
 import edu.miu.cs.cs544.appointment.Repositories.UserRepository;
+import edu.miu.cs.cs544.appointment.Services.interfaces.CategoryService;
 import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,7 +14,7 @@ import java.util.List;
 
 @Service
 @Transactional
-public class CategoryService {
+public class CategoryServiceImpl implements CategoryService {
     @Autowired
     private CategoryRepository categoryRepository;
 

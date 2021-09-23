@@ -10,10 +10,9 @@ import edu.miu.cs.cs544.appointment.Payload.Requests.SignUpRequest;
 import edu.miu.cs.cs544.appointment.Payload.Response.ApiResponse;
 import edu.miu.cs.cs544.appointment.Payload.Response.JwtAuthenticationResponse;
 import edu.miu.cs.cs544.appointment.Repositories.RoleRepository;
-import edu.miu.cs.cs544.appointment.Repositories.UserRepository;
 import edu.miu.cs.cs544.appointment.Security.JwtTokenProvider;
 import edu.miu.cs.cs544.appointment.Security.UserPrincipal;
-import edu.miu.cs.cs544.appointment.Services.UserService;
+import edu.miu.cs.cs544.appointment.Services.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,7 +30,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.Collections;
-import java.util.Objects;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -41,7 +39,7 @@ public class AuthController {
     AuthenticationManager authenticationManager;
 
     @Autowired
-    UserService userService;
+    UserServiceImpl userServiceImpl;
 
     @Autowired
     RoleRepository roleRepository;
@@ -73,12 +71,12 @@ public class AuthController {
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignUpRequest signUpRequest) {
         try{
-            if(userService.existsByUsername(signUpRequest.getUsername())) {
+            if(userServiceImpl.existsByUsername(signUpRequest.getUsername())) {
                 return new ResponseEntity(new ApiResponse(false, "Username is already taken!"),
                         HttpStatus.BAD_REQUEST);
             }
 
-            if(userService.existsByEmail(signUpRequest.getEmail())) {
+            if(userServiceImpl.existsByEmail(signUpRequest.getEmail())) {
                 return new ResponseEntity(new ApiResponse(false, "Email Address already in use!"),
                         HttpStatus.BAD_REQUEST);
             }
@@ -95,7 +93,7 @@ public class AuthController {
 
             user.setRoles(Collections.singleton(userRole));
 
-            User result = userService.save(user);
+            User result = userServiceImpl.save(user);
 
             //notificationServiceFactory.getService(NotificationType.Email).sendNotification(result,"Welcome to MIU Job Portal","Welcome "+result.getName()+" to MIU Job Portal");
 

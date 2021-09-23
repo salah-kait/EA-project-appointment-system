@@ -7,7 +7,7 @@ import edu.miu.cs.cs544.appointment.Payload.Requests.CreateAppointment;
 import edu.miu.cs.cs544.appointment.Payload.Response.ApiResponse;
 import edu.miu.cs.cs544.appointment.Security.CurrentUser;
 import edu.miu.cs.cs544.appointment.Security.UserPrincipal;
-import edu.miu.cs.cs544.appointment.Services.AppointmentService;
+import edu.miu.cs.cs544.appointment.Services.interfaces.AppointmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;

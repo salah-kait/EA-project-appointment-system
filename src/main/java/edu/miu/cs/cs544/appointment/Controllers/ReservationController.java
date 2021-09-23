@@ -1,12 +1,11 @@
 package edu.miu.cs.cs544.appointment.Controllers;
 
-import edu.miu.cs.cs544.appointment.Exception.BadRequestException;
 import edu.miu.cs.cs544.appointment.Models.reservation.Reservation;
 import edu.miu.cs.cs544.appointment.Payload.Response.ApiResponse;
 import edu.miu.cs.cs544.appointment.Security.CurrentUser;
 import edu.miu.cs.cs544.appointment.Security.UserPrincipal;
 import edu.miu.cs.cs544.appointment.Payload.Requests.CreateReservation;
-import edu.miu.cs.cs544.appointment.Services.ReservationService;
+import edu.miu.cs.cs544.appointment.Services.ReservationServiceImpl;
 import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -21,14 +20,14 @@ import org.springframework.web.bind.annotation.*;
 public class ReservationController{
 
     @Autowired
-    private ReservationService reservationService;
+    private ReservationServiceImpl reservationServiceImpl;
 
     // Create user activation
     @PreAuthorize("hasRole('CLIENT')")
     @PostMapping
     public ResponseEntity<?> createReservation(@RequestBody CreateReservation reservation, @CurrentUser UserPrincipal userPrincipal) {
         try {
-            return ResponseEntity.ok(reservationService.createReservation(reservation, userPrincipal.getId()));
+            return ResponseEntity.ok(reservationServiceImpl.createReservation(reservation, userPrincipal.getId()));
         }catch (Exception e){
             return ResponseEntity.badRequest().body(new ApiResponse(false, e.getMessage()));
         }
@@ -39,7 +38,7 @@ public class ReservationController{
     @PreAuthorize("hasRole('ADMIN') OR hasRole('PROVIDER') OR hasRole('CLIENT')")
     public ResponseEntity<?> getReservation(@PathVariable Long id){
         try {
-            Reservation reservation = reservationService.getReservation(id);
+            Reservation reservation = reservationServiceImpl.getReservation(id);
             return ResponseEntity.ok(reservation);
         }catch (NotFoundException notFoundException){
             return ResponseEntity.badRequest().body("reservation not found");
@@ -51,14 +50,14 @@ public class ReservationController{
     @GetMapping(params = "paged=true")
     @PreAuthorize("hasRole('ADMIN') OR hasRole('PROVIDER') OR hasRole('CLIENT')")
     public Page<Reservation> getReservations(Pageable pageable, @CurrentUser UserPrincipal userPrincipal){
-        return reservationService.getUserReservations(pageable, userPrincipal.getId());
+        return reservationServiceImpl.getUserReservations(pageable, userPrincipal.getId());
     }
 
     @PreAuthorize("hasRole('ADMIN') OR hasRole('PROVIDER')")
     @PatchMapping(path = "/admit/{id}")
     public ResponseEntity<?> acceptReservation(@PathVariable Long id){
         try {
-            return ResponseEntity.ok(reservationService.acceptReservation(id));
+            return ResponseEntity.ok(reservationServiceImpl.acceptReservation(id));
         }catch (Exception e){
             return ResponseEntity.badRequest().body(new ApiResponse(false,e.getMessage()));
         }
@@ -69,7 +68,7 @@ public class ReservationController{
     public ResponseEntity<Reservation> cancelReservation(@PathVariable Long id){
 
         try {
-            return ResponseEntity.ok(reservationService.cancelReservation(id));
+            return ResponseEntity.ok(reservationServiceImpl.cancelReservation(id));
         }catch (NotFoundException e){
             return ResponseEntity.badRequest().build();
         }

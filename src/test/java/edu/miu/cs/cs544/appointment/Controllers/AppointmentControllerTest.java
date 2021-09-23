@@ -4,23 +4,17 @@ import edu.miu.cs.cs544.appointment.Models.Role;
 import edu.miu.cs.cs544.appointment.Models.User;
 import edu.miu.cs.cs544.appointment.Models.enums.RoleName;
 import edu.miu.cs.cs544.appointment.Payload.Requests.CreateAppointment;
-import edu.miu.cs.cs544.appointment.Security.CurrentUser;
-import edu.miu.cs.cs544.appointment.Services.AppointmentService;
+import edu.miu.cs.cs544.appointment.Services.interfaces.AppointmentService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.time.LocalDateTime;
 import java.time.Month;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
-
-import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 class AppointmentControllerTest {

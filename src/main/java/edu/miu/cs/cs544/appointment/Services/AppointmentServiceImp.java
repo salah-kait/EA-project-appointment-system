@@ -7,11 +7,11 @@ import edu.miu.cs.cs544.appointment.Models.reservation.Reservation;
 import edu.miu.cs.cs544.appointment.Models.appointment.Appointment;
 
 import edu.miu.cs.cs544.appointment.Payload.Requests.CreateAppointment;
-import edu.miu.cs.cs544.appointment.Payload.Response.ApiResponse;
 import edu.miu.cs.cs544.appointment.Repositories.AppointmentRepository;
 import edu.miu.cs.cs544.appointment.Repositories.CategoryRepository;
 import edu.miu.cs.cs544.appointment.Repositories.UserRepository;
 import edu.miu.cs.cs544.appointment.Security.UserPrincipal;
+import edu.miu.cs.cs544.appointment.Services.interfaces.AppointmentService;
 import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

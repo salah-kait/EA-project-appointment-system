@@ -6,11 +6,11 @@ import edu.miu.cs.cs544.appointment.Models.reservation.Reservation;
 import edu.miu.cs.cs544.appointment.Models.appointment.Appointment;
 import edu.miu.cs.cs544.appointment.Models.reservation.ReservationStatus;
 import edu.miu.cs.cs544.appointment.Payload.Requests.CreateReservation;
-import edu.miu.cs.cs544.appointment.Payload.Response.ApiResponse;
 import edu.miu.cs.cs544.appointment.Repositories.AppointmentRepository;
 import edu.miu.cs.cs544.appointment.Repositories.ReservationRepository;
 import edu.miu.cs.cs544.appointment.Repositories.UserRepository;
 import edu.miu.cs.cs544.appointment.Security.UserPrincipal;
+import edu.miu.cs.cs544.appointment.Services.interfaces.ReservationService;
 import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -22,25 +22,25 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Transactional
-public class ReservationService {
+public class ReservationServiceImpl implements ReservationService {
 
     private final ReservationRepository reservationRepository;
     private final AppointmentRepository appointmentRepository;
     private final UserRepository userRepository;
 
     @Autowired
-    ReservationService(ReservationRepository reservationRepository,
-                       AppointmentRepository appointmentRepository,
-                       UserRepository userRepository) {
+    ReservationServiceImpl(ReservationRepository reservationRepository,
+                           AppointmentRepository appointmentRepository,
+                           UserRepository userRepository) {
         this.reservationRepository = reservationRepository;
         this.appointmentRepository = appointmentRepository;
         this.userRepository = userRepository;
     }
 
+    @Override
     public Reservation createReservation(CreateReservation createReservation, Long userId) throws NotFoundException {
 
 
@@ -79,12 +79,13 @@ public class ReservationService {
      * @param userId
      * @return
      */
+    @Override
     public Page<Reservation> getUserReservations(Pageable pageable, Long userId){
         Page<Reservation> reservations = reservationRepository.findByUserId(pageable, userId);
         return reservations;
     }
-    
 
+    @Override
     public Reservation getReservation(Long id) throws NotFoundException {
         Reservation reservation = reservationRepository.findById(id).orElseThrow(() ->
                 new NotFoundException("reservation not found")
@@ -100,11 +101,13 @@ public class ReservationService {
         return reservation;
     }
 
+    @Override
     public List<Reservation> getReservationByAppointmentAndStatus(Long appointment_id, ReservationStatus status){
         List<Reservation> reservations = reservationRepository.findByAppointmentIdAndStatus(appointment_id, status);
         return reservations;
     }
 
+    @Override
     public Reservation acceptReservation(Long id) throws NotFoundException, IllegalStateException{
         Reservation reservation = reservationRepository.findById(id).orElseThrow(() ->
                 new NotFoundException("reservation not found")
@@ -125,6 +128,7 @@ public class ReservationService {
         return reservationRepository.save(reservation);
     }
 
+    @Override
     public Reservation cancelReservation(Long id) throws NotFoundException {
 
         Reservation reservation = reservationRepository.findById(id).orElseThrow(() ->
@@ -153,7 +157,6 @@ public class ReservationService {
             throw new BadRequestException("unauthorized access detected");
         }
     }
-
 
     public boolean isAlreadyRequested(Long appointmentId, Long userId){
         List<Reservation> reservations = reservationRepository.findByAppointmentIdAndUserId(appointmentId, userId);
