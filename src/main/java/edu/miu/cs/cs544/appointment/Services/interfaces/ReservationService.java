@@ -34,6 +34,8 @@ public interface ReservationService {
 
         public Reservation acceptReservation(Long id) throws NotFoundException, IllegalStateException;
 
+        public Reservation declineReservation(Long id) throws NotFoundException;
+
         public Reservation cancelReservation(Long id) throws NotFoundException ;
 
 }

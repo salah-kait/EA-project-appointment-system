@@ -145,6 +145,19 @@ public class ReservationServiceImpl implements ReservationService {
         return reservationRepository.save(reservation);
     }
 
+    @Override
+    public Reservation declineReservation(Long id) throws NotFoundException {
+
+        Reservation reservation = reservationRepository.findById(id).orElseThrow(() ->
+                new NotFoundException("reservation not found")
+        );
+
+        checkUserEligibility(reservation);
+
+        reservation.setStatus(ReservationStatus.DECLINED);
+        return reservationRepository.save(reservation);
+    }
+
     /**
      * Check if the user is eligible to certain task
      * @param reservation

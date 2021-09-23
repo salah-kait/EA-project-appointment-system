@@ -63,6 +63,17 @@ public class ReservationController{
         }
     }
 
+    @PreAuthorize("hasRole('ADMIN') OR hasRole('PROVIDER')")
+    @PatchMapping(path = "/decline/{id}")
+    public ResponseEntity<?> declineReservation(@PathVariable Long id){
+        try {
+            return ResponseEntity.ok(reservationServiceImpl.declineReservation(id));
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body(new ApiResponse(false,e.getMessage()));
+        }
+    }
+
+
     @PreAuthorize("hasRole('ADMIN') OR hasRole('CLIENT')")
     @PatchMapping(path = "/cancel/{id}")
     public ResponseEntity<Reservation> cancelReservation(@PathVariable Long id){
