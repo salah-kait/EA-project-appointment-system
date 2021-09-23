@@ -34,15 +34,4 @@ public class EaCs544FinalProjectApplication {
         return queueMessagingTemplate;
     }
 
-    @Bean
-    CommandLineRunner run(AppointmentRepository appointmentRepository, RoleRepository roleRepository){
-        return args -> {
-
-//            Appointment appointment = new Appointment(null, null, null, "Fairfield", null);
-//            roleRepository.save(new Role(1L, RoleName.ROLE_CLIENT));
-//            roleRepository.save(new Role(2L, RoleName.ROLE_PROVIDER));
-//            roleRepository.save(new Role(3L, RoleName.ROLE_ADMIN));
-        };
-    }
-
 }
