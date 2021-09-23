@@ -46,6 +46,6 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     public Category getCategoryByTitle(String title){
-        return categoryRepository.findByCategoryTitle(title);
+        return categoryRepository.findByTitle(title);
     }
 }
