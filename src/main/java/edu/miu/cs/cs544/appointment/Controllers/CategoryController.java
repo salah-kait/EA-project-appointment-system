@@ -45,7 +45,7 @@ public class CategoryController {
     }
 
 
-    @GetMapping(value = "/api/category", params = "{title}")
+    @GetMapping(value = "/api/category/{title}")
     @PreAuthorize("hasRole('ADMIN')")
     ResponseEntity<?> getCategoryByTitle(@PathVariable String title){
         try {

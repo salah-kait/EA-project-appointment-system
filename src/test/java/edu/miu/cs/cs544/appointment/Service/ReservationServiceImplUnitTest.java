@@ -88,14 +88,6 @@ public class ReservationServiceImplUnitTest {
         user4.setRoles(new HashSet<Role>(Arrays.asList(role_client)));
 
 
-        createReservation1 = new CreateReservation(ReservationStatus.PENDING, LocalDateTime.now(), 3L, 1L);
-
-        createReservation2 = new CreateReservation(ReservationStatus.PENDING, LocalDateTime.now(), 3L, 1L);
-
-        createReservation3 = new CreateReservation(ReservationStatus.PENDING, LocalDateTime.now(), 4L, 1L);
-
-        createReservation4 = new CreateReservation(ReservationStatus.PENDING, LocalDateTime.now(), 4L, 1L);
-
         reservation1 = new Reservation(1L, ReservationStatus.PENDING, LocalDateTime.of(2021, 2, 3, 7, 10, 22), user3, appointment);
 
         reservation2 = new Reservation(2L, ReservationStatus.PENDING, LocalDateTime.of(2021, 2, 3, 8, 55, 44), user3, appointment);

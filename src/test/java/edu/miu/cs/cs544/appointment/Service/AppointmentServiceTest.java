@@ -74,14 +74,6 @@ public class AppointmentServiceTest {
         user4.setRoles(new HashSet<Role>(Arrays.asList(role_client)));
 
 
-        createAppointment1 = new CreateAppointment(LocalDateTime.now(), LocalDateTime.now(), 3L, "DC",1l);
-
-        createAppointment2 = new CreateAppointment(LocalDateTime.now(), LocalDateTime.now(), 3L, "DC",1l);
-
-        createAppointment3 = new CreateAppointment(LocalDateTime.now(), LocalDateTime.now(), 3L, "DC",1l);
-
-        createAppointment4 = new CreateAppointment(LocalDateTime.now(), LocalDateTime.now(), 3L, "DC",1l);
-
         appointment1 = new Appointment(LocalDateTime.now(), LocalDateTime.now(),30L, "DC");
 
         appointment2 = new Appointment(LocalDateTime.now(), LocalDateTime.now(),15L, "DC");

@@ -1,5 +1,6 @@
 package edu.miu.cs.cs544.appointment.Services;
 
+import edu.miu.cs.cs544.appointment.Exception.BadRequestException;
 import edu.miu.cs.cs544.appointment.Models.appointment.Category;
 import edu.miu.cs.cs544.appointment.Payload.Requests.CreateCategory;
 import edu.miu.cs.cs544.appointment.Repositories.CategoryRepository;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -46,6 +48,12 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     public Category getCategoryByTitle(String title){
-        return categoryRepository.findByTitle(title);
+        Optional<Category> category = categoryRepository.findByTitle(title);
+
+        if(category.isPresent()){
+            return category.get();
+        }else {
+            throw  new BadRequestException("category not found");
+        }
     }
 }
